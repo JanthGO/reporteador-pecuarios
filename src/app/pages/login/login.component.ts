@@ -73,6 +73,7 @@ export class LoginComponent {
 
     try {
       await this.authService.login(this.email(), this.password());
+      await this.authService.loadEmpresaNombre();
       this.router.navigate(['/dashboard', this.division]);
     } catch (error: any) {
       this.error.set(

@@ -1,6 +1,6 @@
 export const environment = {
     production: false,
-    api: 'https://api-sandbox.pecuarios.com/reports/',
+    api: 'https://api.pecuarios.com/reports/',
 
     // -> PORCICULTURA
     // division: 1,

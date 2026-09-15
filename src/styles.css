@@ -8,12 +8,33 @@
   /* --color-sitio: #ab0f08;    */
   /* GANADERIA */
   --color-sitio: #0F261D;
-  --color-sitio-light: #133D2B; 
+  --color-sitio-light: #133D2B;
   /*-> AVICULTURA */
-  /*--color-sitio: #d7ad52;   
-   
-   /* [ FONDOS ] */
+  /*--color-sitio: #d7ad52;*/
+
+  /* [ FONDOS ] */
   --fondo-gris: #eeeeee;
+
+  /* Primary */
+  --color-primary: #0F261D;
+  --color-primary-light: #133D2B:
+  --color-primary-lighter: oklch(0.92 0.04 185);
+
+  /* Surface */
+  --color-bg: oklch(0.975 0.003 256);
+  --color-surface: oklch(1.000 0.000 0);
+  --color-surface-raised: oklch(1.000 0.000 0);
+
+  /* Ink */
+  --color-ink: oklch(0.18 0.01 256);
+  --color-ink-secondary: oklch(0.45 0.01 256);
+  --color-ink-muted: oklch(0.62 0.008 256);
+
+  /* Status */
+  --color-success: oklch(0.62 0.17 155);
+  --color-success-light: oklch(0.92 0.04 155);
+  --color-danger: oklch(0.58 0.22 25);
+  --color-info: oklch(0.55 0.16 256);
 
   /* Borders */
   --color-border: oklch(0.92 0.005 256);
