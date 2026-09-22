@@ -9,4 +9,6 @@ import { AuthService } from '../../../core/services/auth.service';
 })
 export class Sidebar {
   protected readonly authService = inject(AuthService);
+  public readonly empresaNombre = this.authService.empresaNombre;
+
 }

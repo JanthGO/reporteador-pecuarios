@@ -1,0 +1,68 @@
+<div class="date-range-picker" (click)="$event.stopPropagation()">
+  <button
+    class="date-range-trigger"
+    (click)="toggleOpen()"
+    [attr.aria-expanded]="isOpen()"
+    aria-haspopup="dialog"
+    type="button"
+  >
+    <svg class="date-range-trigger__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+      <line x1="16" y1="2" x2="16" y2="6"/>
+      <line x1="8" y1="2" x2="8" y2="6"/>
+      <line x1="3" y1="10" x2="21" y2="10"/>
+    </svg>
+    <span class="date-range-trigger__text">{{ displayText() }}</span>
+    <svg class="date-range-trigger__chevron" [class.date-range-trigger__chevron--open]="isOpen()" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="6 9 12 15 18 9"/>
+    </svg>
+  </button>
+
+  @if (isOpen()) {
+    <div class="date-range-dropdown" role="dialog" aria-label="Seleccionar rango de fechas">
+      <div class="date-range-dropdown__header">
+        <span class="date-range-dropdown__title">Rango de fechas</span>
+      </div>
+
+      <div class="date-range-dropdown__fields">
+        <div class="date-range-field">
+          <label class="date-range-field__label" for="fecha-inicio">Fecha inicial</label>
+          <input
+            id="fecha-inicio"
+            class="date-range-field__input"
+            type="date"
+            [max]="fechaFin() || today()"
+            [value]="fechaInicio()"
+            (input)="fechaInicio.set($any($event.target).value)"
+          />
+        </div>
+        <span class="date-range-dropdown__separator">–</span>
+        <div class="date-range-field">
+          <label class="date-range-field__label" for="fecha-fin">Fecha final</label>
+          <input
+            id="fecha-fin"
+            class="date-range-field__input"
+            type="date"
+            [min]="fechaInicio()"
+            [max]="today()"
+            [value]="fechaFin()"
+            (input)="fechaFin.set($any($event.target).value)"
+          />
+        </div>
+      </div>
+
+      @if (error()) {
+        <p class="date-range-dropdown__error" role="alert">{{ error() }}</p>
+      }
+
+      <div class="date-range-dropdown__actions">
+        <button class="date-range-btn date-range-btn--ghost" type="button" (click)="onClear()">
+          Restablecer
+        </button>
+        <button class="date-range-btn date-range-btn--primary" type="button" (click)="onApply()">
+          Aplicar
+        </button>
+      </div>
+    </div>
+  }
+</div>

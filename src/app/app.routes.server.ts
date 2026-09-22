@@ -6,7 +6,7 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Prerender,
   },
   {
-    path: 'dashboard/:division',
+    path: 'dashboard',
     renderMode: RenderMode.Client,
   },
   {

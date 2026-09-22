@@ -73,8 +73,7 @@ export class LoginComponent {
 
     try {
       await this.authService.login(this.email(), this.password());
-      await this.authService.loadEmpresaNombre();
-      this.router.navigate(['/dashboard', this.division]);
+      this.router.navigate(['/dashboard']);
     } catch (error: any) {
       this.error.set(
         error.error?.message ?? 'No fue posible iniciar sesión.'

@@ -5,14 +5,23 @@ import { HttpClient } from '@angular/common/http';
 import { ResponseLogin } from '../interfaces/auth/ResponseLogin';
 import { ResponseEmpresa } from '../interfaces/auth/ResponseEmpresa';
 import { firstValueFrom } from 'rxjs';
+import { User } from '../interfaces/auth/User';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private currentUser = signal<ResponseLogin | null>(this.getStoredUser());
-  public empresaNombre = signal<string | null>(null);
-
   private http = inject(HttpClient);
   private platformId = inject(PLATFORM_ID);
+
+  private readonly _currentUser = signal<User | null>(
+    this.getStorage<User>('currentUser')
+  );
+
+  private readonly _empresaNombre = signal<string | null>(
+    this.getStorage<string>('empresaNombre')
+  );
+
+  public readonly currentUser = this._currentUser.asReadonly();
+  public readonly empresaNombre = this._empresaNombre.asReadonly();
 
   async login(email: string, password: string): Promise<ResponseLogin> {
     const form = new FormData();
@@ -23,59 +32,54 @@ export class AuthService {
     const response = await firstValueFrom(
       this.http.post<ResponseLogin>(`${environment.api}login`, form)
     );
-    this.currentUser.set(response);
-    this.setStoredUser(response);
+    this._currentUser.set(response.data);
+    this.setStorage('currentUser', response.data);
+    await this.loadEmpresaNombre();
     return response;
   }
 
   async loadEmpresaNombre(): Promise<void> {
-    const user = this.currentUser();
-    console.log('[AuthService] currentUser:', user);
-    const empresaId = user?.empresa;
-    console.log('[AuthService] empresaId:', empresaId);
+    const empresaId = this._currentUser()?.empresa;
     if (!empresaId) return;
-
     try {
-      const url = `${environment.api}name-enterprise/${empresaId}`;
-      console.log('[AuthService] URL:', url);
       const response = await firstValueFrom(
-        this.http.get<ResponseEmpresa>(url)
+        this.http.get<ResponseEmpresa>(`${environment.api}name-enterprise/${empresaId}`)
       );
-      console.log('[AuthService] response:', response);
-      this.empresaNombre.set(response.data.nombre.trim());
-    } catch (error) {
-      console.error('[AuthService] error:', error);
-      this.empresaNombre.set(null);
+      const nombre = response.data.nombre.trim();
+      this._empresaNombre.set(nombre);
+      this.setStorage('empresaNombre', nombre);
+    } catch {
+      this._empresaNombre.set(null);
+      this.removeStorage('empresaNombre');
     }
   }
 
-  private getStoredUser(): ResponseLogin | null {
+  logout(): void {
+    this._currentUser.set(null);
+    this._empresaNombre.set(null);
+    this.removeStorage('currentUser');
+    this.removeStorage('empresaNombre');
+  }
+
+  public getStorage<T>(key: string): T | null {
     if (!isPlatformBrowser(this.platformId)) return null;
-
-    const stored = localStorage.getItem('currentUser');
+    const stored = localStorage.getItem(key);
     if (!stored) return null;
-
     try {
-      return JSON.parse(stored) as ResponseLogin;
+      return JSON.parse(stored) as T;
     } catch {
-      localStorage.removeItem('currentUser');
+      localStorage.removeItem(key);
       return null;
     }
   }
 
-  private setStoredUser(user: ResponseLogin): void {
+  public setStorage<T>(key: string, value: T): void {
     if (!isPlatformBrowser(this.platformId)) return;
-    localStorage.setItem('currentUser', JSON.stringify(user));
+    localStorage.setItem(key, JSON.stringify(value));
   }
 
-  private clearStoredUser(): void {
+  private removeStorage(key: string): void {
     if (!isPlatformBrowser(this.platformId)) return;
-    localStorage.removeItem('currentUser');
-  }
-
-  logout(): void {
-    this.currentUser.set(null);
-    this.empresaNombre.set(null);
-    this.clearStoredUser();
+    localStorage.removeItem(key);
   }
 }
