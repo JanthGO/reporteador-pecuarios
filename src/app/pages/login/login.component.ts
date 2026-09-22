@@ -5,11 +5,12 @@ import { AuthService } from '../../core/services/auth.service';
 import { environment } from '../../../environments/environment';
 import { Footer } from '../../shared/components/footer/footer';
 import { Router } from '@angular/router';
+import { LucideMail, LucideLock, LucideEyeOff, LucideEye } from '@lucide/angular';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, Footer],
+  imports: [CommonModule, FormsModule, Footer, LucideMail, LucideLock, LucideEyeOff, LucideEye],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })

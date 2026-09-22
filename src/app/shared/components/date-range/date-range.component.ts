@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output, signal, computed, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { LucideCalendar, LucideChevronDown } from '@lucide/angular';
 
 export interface DateRange {
   fecha_inicio: string;
@@ -10,7 +11,7 @@ export interface DateRange {
 @Component({
   selector: 'app-date-range',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, LucideCalendar, LucideChevronDown],
   templateUrl: './date-range.component.html',
   styleUrl: './date-range.component.css',
 })
@@ -34,7 +35,7 @@ export class DateRangeComponent implements OnInit {
   ngOnInit(): void {
     const fin = new Date();
     const inicio = new Date();
-    inicio.setMonth(inicio.getMonth() - 1);
+    inicio.setFullYear(inicio.getFullYear() - 1);
 
     this.fechaInicio.set(this.formatDate(inicio));
     this.fechaFin.set(this.formatDate(fin));
@@ -76,7 +77,7 @@ export class DateRangeComponent implements OnInit {
   onClear(): void {
     const fin = new Date();
     const inicio = new Date();
-    inicio.setMonth(inicio.getMonth() - 1);
+    inicio.setFullYear(inicio.getFullYear() - 1);
 
     this.fechaInicio.set(this.formatDate(inicio));
     this.fechaFin.set(this.formatDate(fin));
