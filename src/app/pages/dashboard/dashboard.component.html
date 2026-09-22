@@ -32,11 +32,18 @@
             <app-date-range (rangeChange)="onRangeChange($event)"></app-date-range>
           </div>
           <button class="btn-primary">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <svg lucideDownload [size]="16"></svg>
             Exportar informe
           </button>
         </div>
       </section>
+
+      @if (errorMsg()) {
+      <div class="error-banner" role="alert">
+        <span>{{ errorMsg() }}</span>
+        <button class="error-banner__close" (click)="dismissError()" aria-label="Cerrar">&times;</button>
+      </div>
+      }
 
       <!-- KPI strip -->
       <section class="kpi-strip">
@@ -46,7 +53,7 @@
           </div>
           <div class="kpi-card__value">{{ formatNumber(totalVisitas()) }}</div>
           <div class="kpi-card__footer">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg lucideEye [size]="14"></svg>
             Visitas a la marca
           </div>
         </div>
@@ -57,7 +64,7 @@
           </div>
           <div class="kpi-card__value">{{ formatNumber(promMensual()) }}</div>
           <div class="kpi-card__footer">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            <svg lucideCalendarRange [size]="14"></svg>
             Promedio de visitas mensuales
           </div>
         </div>
@@ -68,7 +75,7 @@
           </div>
           <div class="kpi-card__value">{{ formatNumber(promDiario()) }}</div>
           <div class="kpi-card__footer">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            <svg lucideCalendarDays [size]="14"></svg>
             Promedio de visitas diarias
           </div>
         </div>
@@ -80,22 +87,15 @@
           <h2 class="section__title">{{ chartTitle }}</h2>
           <div class="chart-tabs">
             @for (tab of chartTabs; track tab.key) {
-              <button
-                class="chart-tab"
-                [class.chart-tab--active]="isSelected(tab.key)"
-                (click)="onTabClick(tab.key)"
-              >{{ tab.label }}</button>
+            <button class="chart-tab" [class.chart-tab--active]="isSelected(tab.key)" (click)="onTabClick(tab.key)">{{
+              tab.label }}</button>
             }
           </div>
         </div>
 
-        <div class="chart-card">
-          <highcharts-chart
-            class="chart-container"
-            [options]="chartOptions"
-            [update]="chartUpdateFlag()"
-            (chartInstance)="onChartInstance($event)"
-          ></highcharts-chart>
+        <div class="chart-card"> <highcharts-chart class="chart-container" [options]="chartOptions"
+            [update]="chartUpdateFlag()" (chartInstance)="onChartInstance($event)"></highcharts-chart>
+
         </div>
       </section>
 
@@ -104,14 +104,9 @@
         <h2 class="section__title">Rendimiento por contenido</h2>
         <div class="content-grid">
           @for (section of sections; track section.key) {
-            <app-performance-card
-              [titulo]="section.nombre"
-              [visitas]="getSectionTotal(section.key)"
-              [iconClass]="section.iconClass"
-              [svgIcon]="section.svgIcon"
-              [selected]="isSelected(section.key)"
-              (cardClick)="onCardClick(section.key)"
-            ></app-performance-card>
+          <app-performance-card [titulo]="section.nombre" [visitas]="getSectionTotal(section.key)"
+            [iconClass]="section.iconClass" [iconName]="section.iconName" [selected]="isSelected(section.key)"
+            (cardClick)="onCardClick(section.key)"></app-performance-card>
           }
         </div>
       </section>
@@ -121,7 +116,8 @@
         <div class="section__header">
           <div>
             <h2 class="section__title">Perfil del visitante</h2>
-            <p class="section__sub">Conoce las principales caracter&iacute;sticas de los usuarios registrados que interactuaron con la marca durante el periodo seleccionado.</p>
+            <p class="section__sub">Conoce las principales caracter&iacute;sticas de los usuarios registrados que
+              interactuaron con la marca durante el periodo seleccionado.</p>
           </div>
         </div>
 
@@ -130,7 +126,7 @@
           <div class="profile-card">
             <div class="profile-card__head">
               <div class="profile-card__icon profile-card__icon--occupation">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <svg lucideUser [size]="18"></svg>
               </div>
               <span class="profile-card__label">Ocupaci&oacute;n</span>
             </div>
@@ -189,7 +185,7 @@
           <div class="profile-card">
             <div class="profile-card__head">
               <div class="profile-card__icon profile-card__icon--age">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <svg lucideClock [size]="18"></svg>
               </div>
               <span class="profile-card__label">Edad</span>
             </div>
@@ -257,7 +253,7 @@
           <div class="profile-card">
             <div class="profile-card__head">
               <div class="profile-card__icon profile-card__icon--country">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                <svg lucideGlobe [size]="18"></svg>
               </div>
               <span class="profile-card__label">Pa&iacute;s</span>
             </div>
@@ -265,8 +261,10 @@
             <div class="country-hero">
               <div class="country-hero__ring">
                 <svg viewBox="0 0 80 80" class="country-donut">
-                  <circle cx="40" cy="40" r="34" fill="none" stroke="var(--color-border)" stroke-width="6"/>
-                  <circle cx="40" cy="40" r="34" fill="none" stroke="var(--color-primary)" stroke-width="6" stroke-dasharray="206.8 216.8" stroke-dashoffset="0" transform="rotate(-90 40 40)" stroke-linecap="round"/>
+                  <circle cx="40" cy="40" r="34" fill="none" stroke="var(--color-border)" stroke-width="6" />
+                  <circle cx="40" cy="40" r="34" fill="none" stroke="var(--color-primary)" stroke-width="6"
+                    stroke-dasharray="206.8 216.8" stroke-dashoffset="0" transform="rotate(-90 40 40)"
+                    stroke-linecap="round" />
                 </svg>
                 <div class="country-hero__inner">
                   <span class="country-hero__flag">&#127474;&#127485;</span>
@@ -338,11 +336,12 @@
         <div class="section__header">
           <div>
             <h2 class="section__title">Actividad reciente</h2>
-            <p class="section__sub">&Uacute;ltimas interacciones registradas con los contenidos de SANFER<sup>&reg;</sup> Salud Animal.</p>
+            <p class="section__sub">&Uacute;ltimas interacciones registradas con los contenidos de
+              SANFER<sup>&reg;</sup> Salud Animal.</p>
           </div>
           <a href="#" class="section__link">
             Ver toda la actividad
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            <svg lucideArrowRight [size]="14"></svg>
           </a>
         </div>
 
@@ -363,7 +362,7 @@
                 <td class="activity-table__content">Daimetoprim&reg;</td>
                 <td>
                   <span class="activity-platform">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+                    <svg lucideSmartphone [size]="14"></svg>
                     M&oacute;vil
                   </span>
                 </td>
@@ -374,7 +373,7 @@
                 <td class="activity-table__content">Daimetoprim&reg;</td>
                 <td>
                   <span class="activity-platform">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+                    <svg lucideSmartphone [size]="14"></svg>
                     M&oacute;vil
                   </span>
                 </td>
@@ -385,7 +384,7 @@
                 <td class="activity-table__content">Imidocarb Sanfer&reg;</td>
                 <td>
                   <span class="activity-platform">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                    <svg lucideMonitor [size]="14"></svg>
                     Web
                   </span>
                 </td>
@@ -396,7 +395,7 @@
                 <td class="activity-table__content">Flunixin Sanfer&reg;</td>
                 <td>
                   <span class="activity-platform">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+                    <svg lucideSmartphone [size]="14"></svg>
                     M&oacute;vil
                   </span>
                 </td>
@@ -407,7 +406,7 @@
                 <td class="activity-table__content">Flunixin Sanfer&reg;</td>
                 <td>
                   <span class="activity-platform">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+                    <svg lucideSmartphone [size]="14"></svg>
                     M&oacute;vil
                   </span>
                 </td>
