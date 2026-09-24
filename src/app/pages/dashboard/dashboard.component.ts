@@ -2,79 +2,37 @@ import { Component, inject, signal, computed, OnInit, DestroyRef } from '@angula
 import { CommonModule } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AuthService } from '../../core/services/auth.service';
-import { Sidebar } from '../../shared/components/sidebar/sidebar';
 import { DateRangeComponent, DateRange } from '../../shared/components/date-range/date-range.component';
 import { environment } from '../../../environments/environment';
 import { VisitasService } from '../../core/services/visitas.service';
 import { Visitas, ResponseVisitasTotales, SectionDef } from '../../core/interfaces/dashboard/visitas';
 import { HighchartsChartComponent } from 'highcharts-angular';
 import { PerformanceCard } from './components/performance-card/performance-card';
+import { VisitorProfile } from './components/visitor-profile/visitor-profile';
+import { RecentActivity } from './components/recent-activity/recent-activity';
+import { ActivityItem } from './components/recent-activity/recent-activity.types';
 import type Highcharts from 'highcharts';
 import {
   LucideDownload,
   LucideEye,
-  LucideUser,
-  LucideClock,
-  LucideGlobe,
-  LucideArrowRight,
-  LucideSmartphone,
-  LucideMonitor,
   LucideCalendarRange,
   LucideCalendarDays,
 } from '@lucide/angular';
-import { ResponsePerfilVisitante, PerfilVisitante, info } from '../../core/interfaces/dashboard/PerfilVisitante';
-
-/** Mapeo de nombres de país (con/sin acentos) a bandera emoji para la card de país. */
-const FLAGS = new Map<string, string>([
-  ['México', '🇲🇽'], ['Mexico', '🇲🇽'],
-  ['Colombia', '🇨🇴'],
-  ['Chile', '🇨🇱'],
-  ['Costa Rica', '🇨🇷'],
-  ['Honduras', '🇭🇳'],
-  ['Panamá', '🇵🇦'], ['Panama', '🇵🇦'],
-  ['Argentina', '🇦🇷'],
-  ['Perú', '🇵🇪'], ['Peru', '🇵🇪'],
-  ['Ecuador', '🇪🇨'],
-  ['Venezuela', '🇻🇪'],
-  ['Bolivia', '🇧🇴'],
-  ['Paraguay', '🇵🇾'],
-  ['Uruguay', '🇺🇾'],
-  ['Guatemala', '🇬🇹'],
-  ['El Salvador', '🇸🇻'],
-  ['Nicaragua', '🇳🇮'],
-  ['República Dominicana', '🇩🇴'], ['Republica Dominicana', '🇩🇴'],
-  ['Cuba', '🇨🇺'],
-  ['Puerto Rico', '🇵🇷'],
-  ['España', '🇪🇸'], ['Espana', '🇪🇸'],
-  ['Estados Unidos', '🇺🇸'], ['Estados Unidos de América', '🇺🇸'], ['Estados Unidos de America', '🇺🇸'], ['USA', '🇺🇸'], ['EE. UU.', '🇺🇸'],
-  ['Canadá', '🇨🇦'], ['Canada', '🇨🇦'],
-  ['Brasil', '🇧🇷'],
-  ['Alemania', '🇩🇪'],
-  ['Francia', '🇫🇷'],
-  ['Inglaterra', '🇬🇧'], ['Reino Unido', '🇬🇧'], ['UK', '🇬🇧'],
-  ['Italia', '🇮🇹'],
-  ['Japón', '🇯🇵'], ['Japon', '🇯🇵'],
-  ['China', '🇨🇳'],
-]);
-
+import { ResponsePerfilVisitante, PerfilVisitante } from '../../core/interfaces/dashboard/PerfilVisitante';
+import { Header } from '../../shared/components/header/header';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [
+imports: [
     CommonModule,
-    Sidebar,
     DateRangeComponent,
     HighchartsChartComponent,
     PerformanceCard,
+    VisitorProfile,
+    RecentActivity,
     LucideDownload,
     LucideEye,
-    LucideUser,
-    LucideClock,
-    LucideGlobe,
-    LucideArrowRight,
-    LucideSmartphone,
-    LucideMonitor,
     LucideCalendarRange,
     LucideCalendarDays
   ],
@@ -113,10 +71,7 @@ export class DashboardComponent implements OnInit {
   /** Indica si se está cargando el perfil del visitante del rango actual. */
   protected readonly perfilLoading = signal(false);
 
-  // ── Datos derivados del perfil del visitante ──
-  // Solo se recomputan cuando cambia `perfilData` o el rango seleccionado.
-
-  /** Clave sólida de la caché: `fecha_inicio|fecha_fin`. */
+  /** Clave sólida de la caché del perfil: `fecha_inicio|fecha_fin`. */
   private readonly currentRangeKey = computed(
     () => `${this.currentRange().fecha_inicio}|${this.currentRange().fecha_fin}`,
   );
@@ -124,61 +79,6 @@ export class DashboardComponent implements OnInit {
   /** Perfil del visitante correspondiente al rango seleccionado actualmente. */
   protected readonly perfilActual = computed<PerfilVisitante | null>(
     () => this.perfilData().get(this.currentRangeKey())?.data ?? null,
-  );
-
-  /** Top de ocupaciones (hasta 7). Se ordena descendentemente por el backend. */
-  protected readonly ocupaciones = computed<info[]>(
-    () => (this.perfilActual()?.ocupaciones ?? []).slice(0, 7),
-  );
-  protected readonly ocupacionPrincipal = computed<info | null>(
-    () => this.ocupaciones()[0] ?? null,
-  );
-  protected readonly ocupacionesSecundarias = computed<info[]>(
-    () => this.ocupaciones().slice(1),
-  );
-
-  /**
-   * Distribución combinada de edad (hombre + mujer por rango), ordenada de forma
-   * descendente. El backend entrega los porcentajes separados por género, y la
-   * regla de negocio los agrega para mostrar el desglose total por rango de edad.
-   */
-  protected readonly rangosEdad = computed<{ label: string; value: number }[]>(() => {
-    const perfil = this.perfilActual();
-    if (!perfil?.visitasXgenero) return [];
-
-    const man = perfil.visitasXgenero.porcientoMan;
-    const woman = perfil.visitasXgenero.porcientoWoman;
-
-    return [
-      { label: 'Menos de 20 años', value: man.menos20 + woman.menos20 },
-      { label: '20–30 años', value: man.entre20y30 + woman.entre20y30 },
-      { label: '30–40 años', value: man.entre30y40 + woman.entre30y40 },
-      { label: '40–50 años', value: man.entre40y50 + woman.entre40y50 },
-      { label: '50–60 años', value: man.entre50y60 + woman.entre50y60 },
-      { label: 'Más de 60 años', value: man.mas60 + woman.mas60 },
-    ].sort((a, b) => b.value - a.value);
-  });
-  protected readonly edadPrincipal = computed<{ label: string; value: number } | null>(
-    () => this.rangosEdad()[0] ?? null,
-  );
-  protected readonly edadesSecundarias = computed<{ label: string; value: number }[]>(
-    () => this.rangosEdad().slice(1),
-  );
-
-  /** Top de países (hasta 7). */
-  protected readonly paises = computed<info[]>(
-    () => (this.perfilActual()?.paises ?? []).slice(0, 7),
-  );
-  protected readonly paisPrincipal = computed<info | null>(
-    () => this.paises()[0] ?? null,
-  );
-  protected readonly paisesSecundarios = computed<info[]>(
-    () => this.paises().slice(1),
-  );
-
-  /** Porcentaje agregado del resto de países (`paises_aux`). */
-  protected readonly otrosPaises = computed<number>(
-    () => (this.perfilActual()?.paises_aux ?? []).reduce((acc, p) => acc + (p.promedio ?? 0), 0),
   );
 
   chartTitle = 'Visitas a la marca';
@@ -235,12 +135,19 @@ export class DashboardComponent implements OnInit {
     ...this.sections.map(s => ({ key: s.key, label: s.nombre })),
   ];
 
+  /** Interacciones recientes de los usuarios hacia la marca. */
+  protected readonly recentActivity: ActivityItem[] = [
+    { fechaHora: '15 sep 2026 · 11:11', seccion: 'Productos', seccionClass: 'activity-badge--productos', contenido: 'Daimetoprim®', plataforma: 'Móvil' },
+    { fechaHora: '15 sep 2026 · 11:11', seccion: 'Productos', seccionClass: 'activity-badge--productos', contenido: 'Daimetoprim®', plataforma: 'Móvil' },
+    { fechaHora: '15 sep 2026 · 11:09', seccion: 'Productos', seccionClass: 'activity-badge--productos', contenido: 'Imidocarb Sanfer®', plataforma: 'Web' },
+    { fechaHora: '15 sep 2026 · 10:44', seccion: 'Productos', seccionClass: 'activity-badge--productos', contenido: 'Flunixin Sanfer®', plataforma: 'Móvil' },
+    { fechaHora: '15 sep 2026 · 10:44', seccion: 'Productos', seccionClass: 'activity-badge--productos', contenido: 'Flunixin Sanfer®', plataforma: 'Móvil' },
+  ];
+
   private chartInstance: Highcharts.Chart | null = null;
 
   /** Contador de peticiones HTTP pendientes. Se incrementa al enviar y decrementa al recibir. */
   private pendingRequests = 0;
-
-
 
   ngOnInit(): void {
     this.initChart();
@@ -331,8 +238,6 @@ export class DashboardComponent implements OnInit {
     return this.sectionData().get(sectionKey)?.data.data ?? [];
   }
 
- 
-
   // ──────────────────────────────────────────────
   //  Lógica interna de la gráfica
   // ──────────────────────────────────────────────
@@ -400,6 +305,9 @@ export class DashboardComponent implements OnInit {
    * @returns Objeto `Highcharts.Options` listo para asignar al chart.
    */
   private buildChartOptions(categories: string[], values: number[]): Highcharts.Options {
+    // En series largas, espacia las etiquetas del eje X para evitar solapamiento.
+    const labelStep = categories.length > 40 ? Math.ceil(categories.length / 20) : undefined;
+
     return {
       chart: {
         type: 'areaspline',
@@ -419,6 +327,7 @@ export class DashboardComponent implements OnInit {
           dashStyle: 'Dash',
         },
         labels: {
+          step: labelStep,
           style: {
             fontSize: '0.6875rem',
             color: '#94a3b8',
@@ -584,7 +493,6 @@ export class DashboardComponent implements OnInit {
     }
 
     this.loadPerfil(range);
-
   }
 
   /**
@@ -646,38 +554,5 @@ export class DashboardComponent implements OnInit {
    */
   protected formatNumber(value: number): string {
     return value.toLocaleString('es-MX');
-  }
-
-  /**
-   * Formatea un porcentaje con dos decimales y sufijo `%`.
-   *
-   * @param value - Valor porcentual (0–100). Si no está definido, muestra `'0.00%'`.
-   * @returns String formateado (e.g. `'75.81%'`).
-   */
-  protected formatPct(value: number | undefined): string {
-    return `${(value ?? 0).toFixed(2)}%`;
-  }
-
-  /**
-   * Calcula el `stroke-dasharray` del anillo donut del país principal.
-   *
-   * @param pct - Porcentaje del país principal (0–100).
-   * @returns Cadena `"lleno total"` para un círculo de radio 34 (C ≈ 213.63).
-   */
-  protected donutDasharray(pct: number | undefined): string {
-    const circumference = 213.63;
-    const value = Math.max(0, Math.min(100, pct ?? 0));
-    return `${(value / 100) * circumference} ${circumference}`;
-  }
-
-  /**
-   * Devuelve la bandera emoji de un país para la card de país.
-   *
-   * @param nombre - Nombre del país tal como llega del backend.
-   * @returns Emoji de la bandera, o un globo predeterminado si no hay mapeo.
-   */
-  protected flagEmoji(nombre?: string): string {
-    if (!nombre) return '🌐';
-    return FLAGS.get(nombre) ?? FLAGS.get(nombre.trim()) ?? '🌐';
   }
 }

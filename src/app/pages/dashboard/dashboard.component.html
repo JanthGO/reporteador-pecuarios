@@ -1,338 +1,89 @@
-<div class="layout">
-
-  <app-sidebar></app-sidebar>
-
-  <!-- Main area -->
-  <div class="main">
-    <!-- Top header -->
-    <header class="topbar">
-      <nav class="breadcrumb" aria-label="Breadcrumb">
-        <span class="breadcrumb__item">Marca</span>
-        <span class="breadcrumb__sep">/</span>
-        <span class="breadcrumb__item">{{ empresaNombre() }}</span>
-        <span class="breadcrumb__sep">/</span>
-        <span class="breadcrumb__item breadcrumb__item--current">Resumen</span>
-      </nav>
-      <div class="topbar__user">
-        <span class="topbar__name">{{ usuario()?.nombre_usuario || '' }}</span>
-        <div class="topbar__avatar">{{ usuario()?.nombre_usuario?.charAt(0) || '' }}</div>
-      </div>
-    </header>
-
-    <!-- Content -->
-    <main class="content">
-      <!-- Title section -->
-      <section class="title-section">
-        <div class="title-section__text">
-          <h1 class="title-section__heading">Resumen de rendimiento</h1>
-          <p class="title-section__sub">Consulta el desempe&ntilde;o de {{ empresaNombre() }} dentro de {{ sitio }}</p>
-        </div>
-        <div class="title-section__actions">
-          <div class="date-range-wrapper">
-            <app-date-range (rangeChange)="onRangeChange($event)"></app-date-range>
-          </div>
-          <button class="btn-primary">
-            <svg lucideDownload [size]="16"></svg>
-            Exportar informe
-          </button>
-        </div>
-      </section>
-
-      <!-- KPI strip -->
-      <section class="kpi-strip">
-        <div class="kpi-card kpi-card--featured">
-          <div class="kpi-card__header">
-            <span class="kpi-card__label">Visitas totales</span>
-          </div>
-          <div class="kpi-card__value">{{ formatNumber(totalVisitas()) }}</div>
-          <div class="kpi-card__footer">
-            <svg lucideEye [size]="14"></svg>
-            Visitas a la marca
-          </div>
-        </div>
-
-        <div class="kpi-card">
-          <div class="kpi-card__header">
-            <span class="kpi-card__label">Promedio mensual</span>
-          </div>
-          <div class="kpi-card__value">{{ formatNumber(promMensual()) }}</div>
-          <div class="kpi-card__footer">
-            <svg lucideCalendarRange [size]="14"></svg>
-            Promedio de visitas mensuales
-          </div>
-        </div>
-
-        <div class="kpi-card">
-          <div class="kpi-card__header">
-            <span class="kpi-card__label">Promedio diario</span>
-          </div>
-          <div class="kpi-card__value">{{ formatNumber(promDiario()) }}</div>
-          <div class="kpi-card__footer">
-            <svg lucideCalendarDays [size]="14"></svg>
-            Promedio de visitas diarias
-          </div>
-        </div>
-      </section>
-
-      <!-- Chart section -->
-      <section class="section">
-        <div class="chart-header">
-          <h2 class="section__title">{{ chartTitle }}</h2>
-          <div class="chart-tabs">
-            @for (tab of chartTabs; track tab.key) {
-            <button class="chart-tab" [class.chart-tab--active]="isSelected(tab.key)" (click)="onTabClick(tab.key)">{{
-              tab.label }}</button>
-            }
-          </div>
-        </div>
-
-        <div class="chart-card"> <highcharts-chart class="chart-container" [options]="chartOptions"
-            [update]="chartUpdateFlag()" (chartInstance)="onChartInstance($event)"></highcharts-chart>
-
-        </div>
-      </section>
-
-      <!-- Content performance -->
-      <section class="section">
-        <h2 class="section__title">Rendimiento por contenido</h2>
-        <div class="content-grid">
-          @for (section of sections; track section.key) {
-          <app-performance-card [titulo]="section.nombre" [visitas]="getSectionTotal(section.key)"
-            [iconClass]="section.iconClass" [iconName]="section.iconName" [selected]="isSelected(section.key)"
-            [sparklineData]="getSectionSparkline(section.key)"
-            (cardClick)="onCardClick(section.key)"></app-performance-card>
-          }
-        </div>
-      </section>
-
-      <!-- Visitor profile -->
-      <section class="section">
-        <div class="section__header">
-          <div>
-            <h1 class="title-section__heading">Perfil del visitante</h1>
-            <p class="title-section__sub">Conoce las principales caracter&iacute;sticas de los usuarios registrados que
-              interactuaron con la marca durante el periodo seleccionado.</p>
-          </div>
-        </div>
-
-        <div class="profile-grid">
-          <!-- Ocupación -->
-          <div class="profile-card">
-            <div class="profile-card__head">
-              <div class="profile-card__icon profile-card__icon--occupation">
-                <svg lucideUser [size]="18"></svg>
-              </div>
-              <span class="profile-card__label">Ocupaci&oacute;n</span>
-            </div>
-
-            @if (ocupacionPrincipal(); as item) {
-              <div class="profile-card__featured">
-                <span class="profile-card__featured-name">{{ item.nombre }}</span>
-                <span class="profile-card__featured-value">{{ formatPct(item.promedio) }}</span>
-              </div>
-              <div class="profile-bar">
-                <div class="profile-bar__track">
-                  <div class="profile-bar__fill" [style.width.%]="item.promedio ?? 0"></div>
-                </div>
-              </div>
-            } @else {
-              <div class="profile-card__featured">
-                <span class="profile-card__featured-name">&mdash;</span>
-                <span class="profile-card__featured-value">{{ formatPct(undefined) }}</span>
-              </div>
-            }
-
-            <ul class="profile-list">
-              @for (item of ocupacionesSecundarias(); track item.nombre) {
-                <li class="profile-list__item">
-                  <span class="profile-list__name">{{ item.nombre }}</span>
-                  <span class="profile-list__pct">{{ formatPct(item.promedio) }}</span>
-                  <div class="profile-bar profile-bar--sm">
-                    <div class="profile-bar__track">
-                      <div class="profile-bar__fill" [style.width.%]="item.promedio ?? 0"></div>
-                    </div>
-                  </div>
-                </li>
-              }
-            </ul>
-          </div>
-
-          <!-- Edad -->
-          <div class="profile-card">
-            <div class="profile-card__head">
-              <div class="profile-card__icon profile-card__icon--age">
-                <svg lucideClock [size]="18"></svg>
-              </div>
-              <span class="profile-card__label">Edad</span>
-            </div>
-
-            @if (edadPrincipal(); as item) {
-              <div class="profile-card__featured">
-                <span class="profile-card__featured-name">{{ item.label }}</span>
-                <span class="profile-card__featured-value">{{ formatPct(item.value) }}</span>
-              </div>
-              <div class="profile-bar">
-                <div class="profile-bar__track">
-                  <div class="profile-bar__fill" [style.width.%]="item.value"></div>
-                </div>
-              </div>
-            } @else {
-              <div class="profile-card__featured">
-                <span class="profile-card__featured-name">&mdash;</span>
-                <span class="profile-card__featured-value">{{ formatPct(undefined) }}</span>
-              </div>
-            }
-
-            <ul class="profile-list">
-              @for (item of edadesSecundarias(); track item.label) {
-                <li class="profile-list__item">
-                  <span class="profile-list__name">{{ item.label }}</span>
-                  <span class="profile-list__pct">{{ formatPct(item.value) }}</span>
-                  <div class="profile-bar profile-bar--sm">
-                    <div class="profile-bar__track">
-                      <div class="profile-bar__fill" [style.width.%]="item.value"></div>
-                    </div>
-                  </div>
-                </li>
-              }
-            </ul>
-          </div>
-
-          <!-- País -->
-          <div class="profile-card">
-            <div class="profile-card__head">
-              <div class="profile-card__icon profile-card__icon--country">
-                <svg lucideGlobe [size]="18"></svg>
-              </div>
-              <span class="profile-card__label">Pa&iacute;s</span>
-            </div>
-
-            @if (paisPrincipal(); as item) {
-              <div class="country-hero">
-                <div class="country-hero__ring">
-                  <svg viewBox="0 0 80 80" class="country-donut">
-                    <circle cx="40" cy="40" r="34" fill="none" stroke="var(--color-border)" stroke-width="6" />
-                    <circle cx="40" cy="40" r="34" fill="none" stroke="var(--color-primary)" stroke-width="6"
-                      [attr.stroke-dasharray]="donutDasharray(item.promedio)" stroke-dashoffset="0"
-                      transform="rotate(-90 40 40)" stroke-linecap="round" />
-                  </svg>
-                  <div class="country-hero__inner">
-                    <span class="country-hero__flag">{{ flagEmoji(item.nombre) }}</span>
-                  </div>
-                </div>
-                <div class="country-hero__info">
-                  <span class="country-hero__name">{{ item.nombre }}</span>
-                  <span class="country-hero__pct">{{ formatPct(item.promedio) }}</span>
-                </div>
-              </div>
-            }
-
-            <ul class="profile-list">
-              @for (item of paisesSecundarios(); track item.nombre) {
-                <li class="profile-list__item">
-                  <span class="profile-list__name">{{ item.nombre }}</span>
-                  <span class="profile-list__pct">{{ formatPct(item.promedio) }}</span>
-                  <div class="profile-bar profile-bar--sm">
-                    <div class="profile-bar__track">
-                      <div class="profile-bar__fill" [style.width.%]="item.promedio ?? 0"></div>
-                    </div>
-                  </div>
-                </li>
-              }
-            </ul>
-
-            <p class="profile-card__note">Otros &mdash; {{ formatPct(otrosPaises()) }}</p>
-          </div>
-        </div>
-
-        <p class="section__footnote">Datos basados en las visitas de usuarios registrados en {{ sitio }}.</p>
-      </section>
-
-      <!-- Recent activity -->
-      <section class="section">
-        <div class="section__header">
-          <div>
-            <h2 class="title-section__heading">Actividad reciente</h2>
-            <p class="title-section__sub">&Uacute;ltimas interacciones registradas con los contenidos de
-              SANFER<sup>&reg;</sup> Salud Animal.</p>
-          </div>
-          <a href="#" class="section__link">
-            Ver toda la actividad
-            <svg lucideArrowRight [size]="14"></svg>
-          </a>
-        </div>
-
-        <div class="activity-table-wrap">
-          <table class="activity-table">
-            <thead>
-              <tr>
-                <th>Fecha y hora</th>
-                <th>Secci&oacute;n</th>
-                <th>Contenido</th>
-                <th>Plataforma</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="activity-table__date">15 sep 2026 &middot; 11:11</td>
-                <td><span class="activity-badge activity-badge--productos">Productos</span></td>
-                <td class="activity-table__content">Daimetoprim&reg;</td>
-                <td>
-                  <span class="activity-platform">
-                    <svg lucideSmartphone [size]="14"></svg>
-                    M&oacute;vil
-                  </span>
-                </td>
-              </tr>
-              <tr>
-                <td class="activity-table__date">15 sep 2026 &middot; 11:11</td>
-                <td><span class="activity-badge activity-badge--productos">Productos</span></td>
-                <td class="activity-table__content">Daimetoprim&reg;</td>
-                <td>
-                  <span class="activity-platform">
-                    <svg lucideSmartphone [size]="14"></svg>
-                    M&oacute;vil
-                  </span>
-                </td>
-              </tr>
-              <tr>
-                <td class="activity-table__date">15 sep 2026 &middot; 11:09</td>
-                <td><span class="activity-badge activity-badge--productos">Productos</span></td>
-                <td class="activity-table__content">Imidocarb Sanfer&reg;</td>
-                <td>
-                  <span class="activity-platform">
-                    <svg lucideMonitor [size]="14"></svg>
-                    Web
-                  </span>
-                </td>
-              </tr>
-              <tr>
-                <td class="activity-table__date">15 sep 2026 &middot; 10:44</td>
-                <td><span class="activity-badge activity-badge--productos">Productos</span></td>
-                <td class="activity-table__content">Flunixin Sanfer&reg;</td>
-                <td>
-                  <span class="activity-platform">
-                    <svg lucideSmartphone [size]="14"></svg>
-                    M&oacute;vil
-                  </span>
-                </td>
-              </tr>
-              <tr>
-                <td class="activity-table__date">15 sep 2026 &middot; 10:44</td>
-                <td><span class="activity-badge activity-badge--productos">Productos</span></td>
-                <td class="activity-table__content">Flunixin Sanfer&reg;</td>
-                <td>
-                  <span class="activity-platform">
-                    <svg lucideSmartphone [size]="14"></svg>
-                    M&oacute;vil
-                  </span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-    </main>
+<!-- Title section -->
+<section class="title-section">
+  <div class="title-section__text">
+    <h1 class="title-section__heading">Resumen de rendimiento</h1>
+    <p class="title-section__sub">Consulta el desempe&ntilde;o de {{ empresaNombre() }} dentro de {{ sitio }}</p>
   </div>
-</div>
+  <div class="title-section__actions">
+    <div class="date-range-wrapper">
+      <app-date-range (rangeChange)="onRangeChange($event)"></app-date-range>
+    </div>
+    <button class="btn-primary">
+      <svg lucideDownload [size]="16"></svg>
+      Exportar informe
+    </button>
+  </div>
+</section>
+
+<!-- KPI strip -->
+<section class="kpi-strip">
+  <div class="kpi-card kpi-card--featured">
+    <div class="kpi-card__header">
+      <span class="kpi-card__label">Visitas totales</span>
+    </div>
+    <div class="kpi-card__value">{{ formatNumber(totalVisitas()) }}</div>
+    <div class="kpi-card__footer">
+      <svg lucideEye [size]="14"></svg>
+      Visitas a la marca
+    </div>
+  </div>
+
+  <div class="kpi-card">
+    <div class="kpi-card__header">
+      <span class="kpi-card__label">Promedio mensual</span>
+    </div>
+    <div class="kpi-card__value">{{ formatNumber(promMensual()) }}</div>
+    <div class="kpi-card__footer">
+      <svg lucideCalendarRange [size]="14"></svg>
+      Promedio de visitas mensuales
+    </div>
+  </div>
+
+  <div class="kpi-card">
+    <div class="kpi-card__header">
+      <span class="kpi-card__label">Promedio diario</span>
+    </div>
+    <div class="kpi-card__value">{{ formatNumber(promDiario()) }}</div>
+    <div class="kpi-card__footer">
+      <svg lucideCalendarDays [size]="14"></svg>
+      Promedio de visitas diarias
+    </div>
+  </div>
+</section>
+
+<!-- Chart section -->
+<section class="section">
+  <div class="chart-header">
+    <h2 class="section__title">{{ chartTitle }}</h2>
+    <div class="chart-tabs">
+      @for (tab of chartTabs; track tab.key) {
+      <button class="chart-tab" [class.chart-tab--active]="isSelected(tab.key)" (click)="onTabClick(tab.key)">{{
+        tab.label }}</button>
+      }
+    </div>
+  </div>
+
+  <div class="chart-card"> <highcharts-chart class="chart-container" [options]="chartOptions"
+      [update]="chartUpdateFlag()" (chartInstance)="onChartInstance($event)"></highcharts-chart>
+
+  </div>
+</section>
+
+<!-- Content performance -->
+<section class="section">
+  <h2 class="section__title">Rendimiento por contenido</h2>
+  <div class="content-grid">
+    @for (section of sections; track section.key) {
+    <app-performance-card [titulo]="section.nombre" [visitas]="getSectionTotal(section.key)"
+      [iconClass]="section.iconClass" [iconName]="section.iconName" [selected]="isSelected(section.key)"
+      [sparklineData]="getSectionSparkline(section.key)"
+      (cardClick)="onCardClick(section.key)"></app-performance-card>
+    }
+  </div>
+</section>
+
+<!-- Visitor profile -->
+<app-visitor-profile [perfil]="perfilActual()" [sitio]="sitio"></app-visitor-profile>
+
+<!-- Recent activity -->
+<app-recent-activity [items]="recentActivity"></app-recent-activity>
