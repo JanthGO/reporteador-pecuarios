@@ -16,6 +16,7 @@ export class LayoutComponent {
 
   protected readonly sidebarOpen = signal(false);
   protected readonly usuario = this.authService.currentUser;
+  protected readonly empresaNombre = this.authService.empresaNombre;
   protected readonly breadcrumb = computed(() => [
     'Marca',
     this.authService.empresaNombre() ?? '',

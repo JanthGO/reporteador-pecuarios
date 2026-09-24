@@ -1,0 +1,230 @@
+.section__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-5);
+  flex-wrap: wrap;
+}
+
+.title-section__heading {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+  margin: 0 0 var(--space-1);
+  line-height: 1.2;
+}
+
+.title-section__sub {
+  font-size: 0.875rem;
+  color: var(--color-ink-secondary);
+  margin: 0;
+}
+
+/* ── Lista de actividades ── */
+
+.activity-list {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-2);
+}
+
+.activity-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-5);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  transition:
+    transform var(--duration-normal) var(--ease-out),
+    box-shadow var(--duration-normal) var(--ease-out),
+    border-color var(--duration-normal) var(--ease-out);
+}
+
+.activity-card:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-border-strong);
+}
+
+.activity-card__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+  background: oklch(0.95 0.01 260);
+  color: var(--color-ink-muted);
+}
+
+.activity-card__icon svg {
+  flex-shrink: 0;
+}
+
+.activity-card__body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.activity-card__titleline {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.activity-card__title {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--color-ink);
+  overflow-wrap: anywhere;
+}
+
+.activity-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.activity-badge--productos {
+  background: oklch(0.92 0.04 185);
+  color: oklch(0.45 0.12 185);
+}
+
+.activity-badge--articulos {
+  background: oklch(0.94 0.03 255);
+  color: oklch(0.45 0.12 255);
+}
+
+.activity-badge--micrositio {
+  background: oklch(0.93 0.04 145);
+  color: oklch(0.42 0.11 145);
+}
+
+.activity-badge--noticias {
+  background: oklch(0.93 0.04 65);
+  color: oklch(0.45 0.11 65);
+}
+
+.activity-badge--eventos {
+  background: oklch(0.93 0.04 300);
+  color: oklch(0.45 0.12 300);
+}
+
+.activity-badge--vacante {
+  background: oklch(0.94 0.03 35);
+  color: oklch(0.45 0.11 35);
+}
+
+.activity-badge--videos {
+  background: oklch(0.94 0.03 20);
+  color: oklch(0.45 0.11 20);
+}
+
+.activity-badge--general {
+  background: oklch(0.95 0.01 260);
+  color: oklch(0.5 0.05 260);
+}
+
+.activity-card__meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  font-size: 0.8125rem;
+  color: var(--color-ink-secondary);
+}
+
+.activity-card__date {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.activity-card__dot {
+  color: var(--color-border-strong);
+  line-height: 1;
+}
+
+.activity-card__platform {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.activity-card__platform-icon {
+  opacity: 0.65;
+  flex-shrink: 0;
+}
+
+/* ── Estado vacío ── */
+
+.activity-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  padding: var(--space-10) var(--space-5);
+  text-align: center;
+  background: var(--color-surface);
+  border: 1px dashed var(--color-border-strong);
+  border-radius: var(--radius-md);
+}
+
+.activity-empty__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  margin-bottom: var(--space-2);
+  border-radius: var(--radius-full);
+  background: var(--color-primary-lighter);
+  color: var(--color-primary);
+}
+
+.activity-empty__title {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.activity-empty__detail {
+  margin: 0;
+  max-width: 38ch;
+  font-size: 0.8125rem;
+  color: var(--color-ink-secondary);
+}
+
+/* ── Responsive ── */
+
+@media (max-width: 480px) {
+  .activity-card {
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .activity-card__icon {
+    width: 36px;
+    height: 36px;
+  }
+}

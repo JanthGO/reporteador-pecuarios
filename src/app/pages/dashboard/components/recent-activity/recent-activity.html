@@ -1,0 +1,47 @@
+<section class="section">
+  <div class="section__header">
+    <div>
+      <h2 class="title-section__heading">Actividad reciente</h2>
+      <p class="title-section__sub">Últimas interacciones registradas con los contenidos de {{ empresa ?? '' }}</p>
+    </div>
+  </div>
+
+  @if (actividad().length > 0) {
+    <div class="activity-list grid grid-cols-2 gap-4 md:grid-cols-3">
+      @for (item of actividad(); track $index) {
+        <div class="activity-card">
+          <div class="activity-card__icon" [class]="item.seccionClass" aria-hidden="true">
+            <svg [lucideIcon]="iconFor(item)" [size]="18"></svg>
+          </div>
+
+          <div class="activity-card__body">
+            <div class="activity-card__titleline">
+              <h3 class="activity-card__title">{{ item.contenido }}</h3>
+              <span class="activity-badge" [class]="item.seccionClass">{{ item.seccion }}</span>
+            </div>
+
+            <div class="activity-card__meta">
+              <time class="activity-card__date">{{ item.fechaHora }}</time>
+              <span class="activity-card__dot" aria-hidden="true">·</span>
+              @if (item.plataforma === 'Web') {
+                <svg lucideMonitor [size]="14" class="activity-card__platform-icon"></svg>
+              } @else {
+                <svg lucideSmartphone [size]="14" class="activity-card__platform-icon"></svg>
+              }
+              <span class="activity-card__platform">{{ item.plataforma }}</span>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="activity-empty">
+      <div class="activity-empty__icon" aria-hidden="true">
+        <svg lucideInbox [size]="22"></svg>
+      </div>
+      <p class="activity-empty__title">Sin actividad registrada</p>
+      <p class="activity-empty__detail">Aún no hay interacciones en este rango de fechas.
+        Amplía el periodo para descubrir más.</p>
+    </div>
+  }
+</section>

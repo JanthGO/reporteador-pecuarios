@@ -46,7 +46,7 @@ export class DashboardComponent implements OnInit {
   private visitasService = inject(VisitasService);
   private destroyRef = inject(DestroyRef);
 
-  protected readonly empresaNombre = this.authService.empresaNombre;
+  protected readonly empresaNombre = this.authService.empresaNombre ?? '';
   protected readonly usuario = this.authService.currentUser;
   protected readonly sitio = environment.nombre_dominio;
 

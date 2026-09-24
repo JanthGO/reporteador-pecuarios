@@ -5,6 +5,7 @@
     <app-header
       [breadcrumb]="breadcrumb()"
       [userName]="usuario()?.nombre_usuario || ''"
+      [subtitle]="empresaNombre() ?? ''"
       (menuClick)="toggleSidebar()"
     ></app-header>
 

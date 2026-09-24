@@ -14,8 +14,47 @@
       }
     </nav>
   </div>
-  <div class="topbar__right">
-    <span class="topbar__name">{{ userName() }}</span>
-    <div class="topbar__avatar">{{ avatarInitial() }}</div>
+
+  <div class="user-menu" [class.user-menu--open]="isMenuOpen()">
+    <button
+      type="button"
+      class="user-menu__trigger"
+      aria-haspopup="true"
+      [attr.aria-expanded]="isMenuOpen()"
+      (click)="toggleMenu()"
+    >
+      <span class="topbar__name">{{ userName() }}</span>
+      <span class="topbar__avatar">{{ avatarInitial() }}</span>
+      <svg lucideChevronDown [size]="14" class="user-menu__chevron" aria-hidden="true"></svg>
+    </button>
+
+    <div class="user-menu__dropdown" role="menu" aria-label="Menú de usuario">
+      <div class="user-menu__header">
+        <div class="user-menu__avatar" aria-hidden="true">{{ avatarInitial() }}</div>
+        <div class="user-menu__info">
+          <p class="user-menu__name">{{ userName() }}</p>
+          @if (subtitle()) {
+            <p class="user-menu__subtitle">{{ subtitle() }}</p>
+          }
+        </div>
+      </div>
+
+      <button
+        type="button"
+        class="user-menu__logout"
+        role="menuitem"
+        [disabled]="isLoggingOut()"
+        (click)="logout()"
+      >
+        <svg lucideLogOut [size]="16" aria-hidden="true"></svg>
+        <span>{{ isLoggingOut() ? 'Cerrando sesión…' : 'Cerrar sesión' }}</span>
+      </button>
+
+      @if (logoutError()) {
+        <p class="user-menu__error" role="alert">
+          No se pudo cerrar la sesión. Inténtalo de nuevo.
+        </p>
+      }
+    </div>
   </div>
 </header>
