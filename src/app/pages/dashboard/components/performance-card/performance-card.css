@@ -3,7 +3,7 @@
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  padding: var(--space-4) var(--space-4);
+  padding: var(--space-5);
   cursor: pointer;
   transition:
     box-shadow var(--duration-normal) var(--ease-out),
@@ -34,13 +34,12 @@
 }
 
 .content-card__icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: var(--space-3);
   flex-shrink: 0;
 }
 
@@ -79,15 +78,9 @@
   color: var(--color-ink-muted);
 }
 
-.content-card__body {
-  display: flex;
-  flex-direction: column;
-}
-
 .content-card__top {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  gap: var(--space-2);
   margin-bottom: var(--space-1);
 }
 
@@ -95,21 +88,24 @@
   font-size: 0.8125rem;
   font-weight: 500;
   color: var(--color-ink-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .content-card__sparkline {
-  width: 64px;
-  height: 24px;
+  width: 128px;
+  height: 48px;
   flex-shrink: 0;
+  margin-left: auto;
 }
 
 .content-card__count {
-  font-size: 1.375rem;
+  font-size: 1.25rem;
   font-weight: 700;
   letter-spacing: -0.02em;
   color: var(--color-ink);
   line-height: 1.2;
-  margin-bottom: var(--space-2);
   font-variant-numeric: tabular-nums;
 }
 

@@ -8,15 +8,25 @@
   (keydown.enter)="cardClick.emit()"
   (keydown.space)="cardClick.emit(); $event.preventDefault()"
 >
-  <div class="content-card__icon" [class]="iconClass()">
-    <svg [lucideIcon]="iconName()" [size]="20"></svg>
-  </div>
-  <div class="content-card__body">
-    <div class="content-card__top">
+  <div class="content-card__top flex items-center">
+    <div class="content-card__icon" [class]="iconClass()">
+      <svg [lucideIcon]="iconName()" [size]="16"></svg>
+    </div>
+    <div>
       <span class="content-card__name">{{ titulo() }}</span>
+      <div class="content-card__count" [class.content-card__count--zero]="visitas() === 0">
+        {{ visitas() === 0 ? '0' : (visitas() | number) }}
+      </div>
+
     </div>
-    <div class="content-card__count" [class.content-card_count--zero_]="visitas() === 0">
-      {{ visitas() === 0 ? '0' : (visitas() | number) }}
-    </div>
+    <div class="content-card__sparkline">
+        @if (sparklineData().length > 0) {
+          <highcharts-chart
+            [options]="sparklineOptions()"
+            [update]="true"
+          ></highcharts-chart>
+        }
+      </div>
+    
   </div>
 </div>
