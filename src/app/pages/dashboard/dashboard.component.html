@@ -38,13 +38,6 @@
         </div>
       </section>
 
-      @if (errorMsg()) {
-      <div class="error-banner" role="alert">
-        <span>{{ errorMsg() }}</span>
-        <button class="error-banner__close" (click)="dismissError()" aria-label="Cerrar">&times;</button>
-      </div>
-      }
-
       <!-- KPI strip -->
       <section class="kpi-strip">
         <div class="kpi-card kpi-card--featured">
@@ -106,6 +99,7 @@
           @for (section of sections; track section.key) {
           <app-performance-card [titulo]="section.nombre" [visitas]="getSectionTotal(section.key)"
             [iconClass]="section.iconClass" [iconName]="section.iconName" [selected]="isSelected(section.key)"
+            [sparklineData]="getSectionSparkline(section.key)"
             (cardClick)="onCardClick(section.key)"></app-performance-card>
           }
         </div>
@@ -115,8 +109,8 @@
       <section class="section">
         <div class="section__header">
           <div>
-            <h2 class="section__title">Perfil del visitante</h2>
-            <p class="section__sub">Conoce las principales caracter&iacute;sticas de los usuarios registrados que
+            <h1 class="title-section__heading">Perfil del visitante</h1>
+            <p class="title-section__sub">Conoce las principales caracter&iacute;sticas de los usuarios registrados que
               interactuaron con la marca durante el periodo seleccionado.</p>
           </div>
         </div>
@@ -131,53 +125,35 @@
               <span class="profile-card__label">Ocupaci&oacute;n</span>
             </div>
 
-            <div class="profile-card__featured">
-              <span class="profile-card__featured-name">Ganadero</span>
-              <span class="profile-card__featured-value">75.81%</span>
-            </div>
-            <div class="profile-bar">
-              <div class="profile-bar__track">
-                <div class="profile-bar__fill" style="width: 75.81%"></div>
+            @if (ocupacionPrincipal(); as item) {
+              <div class="profile-card__featured">
+                <span class="profile-card__featured-name">{{ item.nombre }}</span>
+                <span class="profile-card__featured-value">{{ formatPct(item.promedio) }}</span>
               </div>
-            </div>
+              <div class="profile-bar">
+                <div class="profile-bar__track">
+                  <div class="profile-bar__fill" [style.width.%]="item.promedio ?? 0"></div>
+                </div>
+              </div>
+            } @else {
+              <div class="profile-card__featured">
+                <span class="profile-card__featured-name">&mdash;</span>
+                <span class="profile-card__featured-value">{{ formatPct(undefined) }}</span>
+              </div>
+            }
 
             <ul class="profile-list">
-              <li class="profile-list__item">
-                <span class="profile-list__name">Estudiante</span>
-                <span class="profile-list__pct">8.37%</span>
-                <div class="profile-bar profile-bar--sm">
-                  <div class="profile-bar__track">
-                    <div class="profile-bar__fill" style="width: 8.37%"></div>
+              @for (item of ocupacionesSecundarias(); track item.nombre) {
+                <li class="profile-list__item">
+                  <span class="profile-list__name">{{ item.nombre }}</span>
+                  <span class="profile-list__pct">{{ formatPct(item.promedio) }}</span>
+                  <div class="profile-bar profile-bar--sm">
+                    <div class="profile-bar__track">
+                      <div class="profile-bar__fill" [style.width.%]="item.promedio ?? 0"></div>
+                    </div>
                   </div>
-                </div>
-              </li>
-              <li class="profile-list__item">
-                <span class="profile-list__name">Asesor</span>
-                <span class="profile-list__pct">6.98%</span>
-                <div class="profile-bar profile-bar--sm">
-                  <div class="profile-bar__track">
-                    <div class="profile-bar__fill" style="width: 6.98%"></div>
-                  </div>
-                </div>
-              </li>
-              <li class="profile-list__item">
-                <span class="profile-list__name">M&eacute;dico Veterinario</span>
-                <span class="profile-list__pct">4.65%</span>
-                <div class="profile-bar profile-bar--sm">
-                  <div class="profile-bar__track">
-                    <div class="profile-bar__fill" style="width: 4.65%"></div>
-                  </div>
-                </div>
-              </li>
-              <li class="profile-list__item">
-                <span class="profile-list__name">Empresario</span>
-                <span class="profile-list__pct">4.19%</span>
-                <div class="profile-bar profile-bar--sm">
-                  <div class="profile-bar__track">
-                    <div class="profile-bar__fill" style="width: 4.19%"></div>
-                  </div>
-                </div>
-              </li>
+                </li>
+              }
             </ul>
           </div>
 
@@ -190,62 +166,35 @@
               <span class="profile-card__label">Edad</span>
             </div>
 
-            <div class="profile-card__featured">
-              <span class="profile-card__featured-name">50&ndash;60 a&ntilde;os</span>
-              <span class="profile-card__featured-value">40.54%</span>
-            </div>
-            <div class="profile-bar">
-              <div class="profile-bar__track">
-                <div class="profile-bar__fill" style="width: 40.54%"></div>
+            @if (edadPrincipal(); as item) {
+              <div class="profile-card__featured">
+                <span class="profile-card__featured-name">{{ item.label }}</span>
+                <span class="profile-card__featured-value">{{ formatPct(item.value) }}</span>
               </div>
-            </div>
+              <div class="profile-bar">
+                <div class="profile-bar__track">
+                  <div class="profile-bar__fill" [style.width.%]="item.value"></div>
+                </div>
+              </div>
+            } @else {
+              <div class="profile-card__featured">
+                <span class="profile-card__featured-name">&mdash;</span>
+                <span class="profile-card__featured-value">{{ formatPct(undefined) }}</span>
+              </div>
+            }
 
             <ul class="profile-list">
-              <li class="profile-list__item">
-                <span class="profile-list__name">20&ndash;30 a&ntilde;os</span>
-                <span class="profile-list__pct">37.84%</span>
-                <div class="profile-bar profile-bar--sm">
-                  <div class="profile-bar__track">
-                    <div class="profile-bar__fill" style="width: 37.84%"></div>
+              @for (item of edadesSecundarias(); track item.label) {
+                <li class="profile-list__item">
+                  <span class="profile-list__name">{{ item.label }}</span>
+                  <span class="profile-list__pct">{{ formatPct(item.value) }}</span>
+                  <div class="profile-bar profile-bar--sm">
+                    <div class="profile-bar__track">
+                      <div class="profile-bar__fill" [style.width.%]="item.value"></div>
+                    </div>
                   </div>
-                </div>
-              </li>
-              <li class="profile-list__item">
-                <span class="profile-list__name">40&ndash;50 a&ntilde;os</span>
-                <span class="profile-list__pct">10.36%</span>
-                <div class="profile-bar profile-bar--sm">
-                  <div class="profile-bar__track">
-                    <div class="profile-bar__fill" style="width: 10.36%"></div>
-                  </div>
-                </div>
-              </li>
-              <li class="profile-list__item">
-                <span class="profile-list__name">30&ndash;40 a&ntilde;os</span>
-                <span class="profile-list__pct">7.66%</span>
-                <div class="profile-bar profile-bar--sm">
-                  <div class="profile-bar__track">
-                    <div class="profile-bar__fill" style="width: 7.66%"></div>
-                  </div>
-                </div>
-              </li>
-              <li class="profile-list__item">
-                <span class="profile-list__name">M&aacute;s de 60 a&ntilde;os</span>
-                <span class="profile-list__pct">2.70%</span>
-                <div class="profile-bar profile-bar--sm">
-                  <div class="profile-bar__track">
-                    <div class="profile-bar__fill" style="width: 2.70%"></div>
-                  </div>
-                </div>
-              </li>
-              <li class="profile-list__item">
-                <span class="profile-list__name">Menos de 20 a&ntilde;os</span>
-                <span class="profile-list__pct">0.90%</span>
-                <div class="profile-bar profile-bar--sm">
-                  <div class="profile-bar__track">
-                    <div class="profile-bar__fill" style="width: 0.90%"></div>
-                  </div>
-                </div>
-              </li>
+                </li>
+              }
             </ul>
           </div>
 
@@ -258,85 +207,53 @@
               <span class="profile-card__label">Pa&iacute;s</span>
             </div>
 
-            <div class="country-hero">
-              <div class="country-hero__ring">
-                <svg viewBox="0 0 80 80" class="country-donut">
-                  <circle cx="40" cy="40" r="34" fill="none" stroke="var(--color-border)" stroke-width="6" />
-                  <circle cx="40" cy="40" r="34" fill="none" stroke="var(--color-primary)" stroke-width="6"
-                    stroke-dasharray="206.8 216.8" stroke-dashoffset="0" transform="rotate(-90 40 40)"
-                    stroke-linecap="round" />
-                </svg>
-                <div class="country-hero__inner">
-                  <span class="country-hero__flag">&#127474;&#127485;</span>
+            @if (paisPrincipal(); as item) {
+              <div class="country-hero">
+                <div class="country-hero__ring">
+                  <svg viewBox="0 0 80 80" class="country-donut">
+                    <circle cx="40" cy="40" r="34" fill="none" stroke="var(--color-border)" stroke-width="6" />
+                    <circle cx="40" cy="40" r="34" fill="none" stroke="var(--color-primary)" stroke-width="6"
+                      [attr.stroke-dasharray]="donutDasharray(item.promedio)" stroke-dashoffset="0"
+                      transform="rotate(-90 40 40)" stroke-linecap="round" />
+                  </svg>
+                  <div class="country-hero__inner">
+                    <span class="country-hero__flag">{{ flagEmoji(item.nombre) }}</span>
+                  </div>
+                </div>
+                <div class="country-hero__info">
+                  <span class="country-hero__name">{{ item.nombre }}</span>
+                  <span class="country-hero__pct">{{ formatPct(item.promedio) }}</span>
                 </div>
               </div>
-              <div class="country-hero__info">
-                <span class="country-hero__name">M&eacute;xico</span>
-                <span class="country-hero__pct">95.95%</span>
-              </div>
-            </div>
+            }
 
             <ul class="profile-list">
-              <li class="profile-list__item">
-                <span class="profile-list__name">Colombia</span>
-                <span class="profile-list__pct">1.80%</span>
-                <div class="profile-bar profile-bar--sm">
-                  <div class="profile-bar__track">
-                    <div class="profile-bar__fill" style="width: 1.80%"></div>
+              @for (item of paisesSecundarios(); track item.nombre) {
+                <li class="profile-list__item">
+                  <span class="profile-list__name">{{ item.nombre }}</span>
+                  <span class="profile-list__pct">{{ formatPct(item.promedio) }}</span>
+                  <div class="profile-bar profile-bar--sm">
+                    <div class="profile-bar__track">
+                      <div class="profile-bar__fill" [style.width.%]="item.promedio ?? 0"></div>
+                    </div>
                   </div>
-                </div>
-              </li>
-              <li class="profile-list__item">
-                <span class="profile-list__name">Chile</span>
-                <span class="profile-list__pct">0.90%</span>
-                <div class="profile-bar profile-bar--sm">
-                  <div class="profile-bar__track">
-                    <div class="profile-bar__fill" style="width: 0.90%"></div>
-                  </div>
-                </div>
-              </li>
-              <li class="profile-list__item">
-                <span class="profile-list__name">Costa Rica</span>
-                <span class="profile-list__pct">0.45%</span>
-                <div class="profile-bar profile-bar--sm">
-                  <div class="profile-bar__track">
-                    <div class="profile-bar__fill" style="width: 0.45%"></div>
-                  </div>
-                </div>
-              </li>
-              <li class="profile-list__item">
-                <span class="profile-list__name">Honduras</span>
-                <span class="profile-list__pct">0.45%</span>
-                <div class="profile-bar profile-bar--sm">
-                  <div class="profile-bar__track">
-                    <div class="profile-bar__fill" style="width: 0.45%"></div>
-                  </div>
-                </div>
-              </li>
-              <li class="profile-list__item">
-                <span class="profile-list__name">Panam&aacute;</span>
-                <span class="profile-list__pct">0.45%</span>
-                <div class="profile-bar profile-bar--sm">
-                  <div class="profile-bar__track">
-                    <div class="profile-bar__fill" style="width: 0.45%"></div>
-                  </div>
-                </div>
-              </li>
+                </li>
+              }
             </ul>
 
-            <p class="profile-card__note">Otros &mdash; 0.00%</p>
+            <p class="profile-card__note">Otros &mdash; {{ formatPct(otrosPaises()) }}</p>
           </div>
         </div>
 
-        <p class="section__footnote">Datos basados en las visitas de usuarios registrados en Ganaderia.com.</p>
+        <p class="section__footnote">Datos basados en las visitas de usuarios registrados en {{ sitio }}.</p>
       </section>
 
       <!-- Recent activity -->
       <section class="section">
         <div class="section__header">
           <div>
-            <h2 class="section__title">Actividad reciente</h2>
-            <p class="section__sub">&Uacute;ltimas interacciones registradas con los contenidos de
+            <h2 class="title-section__heading">Actividad reciente</h2>
+            <p class="title-section__sub">&Uacute;ltimas interacciones registradas con los contenidos de
               SANFER<sup>&reg;</sup> Salud Animal.</p>
           </div>
           <a href="#" class="section__link">

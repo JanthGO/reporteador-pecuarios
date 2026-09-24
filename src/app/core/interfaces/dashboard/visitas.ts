@@ -14,3 +14,15 @@ export interface Visitas {
     fecha:   string;
     visitas: number;
 }
+
+export interface RetryConfig {
+  maxRetries: number;
+  delayMs: number;
+}
+
+export interface SectionDef {
+  key: string;
+  nombre: string;
+  iconClass: string;
+  iconName: string;
+}
