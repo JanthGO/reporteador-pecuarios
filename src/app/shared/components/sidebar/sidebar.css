@@ -93,3 +93,25 @@
     margin-top: var(--space-6);
     border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
+
+/* ── Responsive: panel off-canvas en pantallas pequeñas ── */
+
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+        transition: transform var(--duration-normal) var(--ease-out);
+    }
+
+    :host-context(.layout--sidebar-open)::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        z-index: calc(var(--z-sticky) - 1);
+        background: oklch(0.13 0.04 256 / 0.4);
+    }
+
+    :host-context(.layout--sidebar-open) .sidebar {
+        transform: translateX(0);
+        box-shadow: var(--shadow-lg);
+    }
+}
