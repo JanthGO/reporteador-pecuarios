@@ -1,0 +1,40 @@
+/* ── Shell layout: sidebar fija + main + zona de contenido ── */
+
+:host {
+  display: block;
+  min-height: 100dvh;
+  background: var(--color-bg);
+}
+
+.layout {
+  display: flex;
+  min-height: 100dvh;
+}
+
+.main {
+  flex: 1;
+  margin-left: 240px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  min-width: 0;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-8);
+}
+
+/* ── Responsive: el sidebar pasa a off-canvas ── */
+
+@media (max-width: 768px) {
+  .main {
+    margin-left: 0;
+  }
+
+  .content {
+    padding: var(--space-4);
+  }
+}

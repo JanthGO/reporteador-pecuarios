@@ -1,0 +1,16 @@
+<div class="layout" [class.layout--sidebar-open]="sidebarOpen()">
+  <app-sidebar (close)="closeSidebar()"></app-sidebar>
+
+  <div class="main">
+    <app-header
+      [breadcrumb]="breadcrumb()"
+      [userName]="usuario()?.nombre_usuario || ''"
+      (menuClick)="toggleSidebar()"
+    ></app-header>
+
+    <!-- Zona de contenido dinámico: única sección que cambia por vista -->
+    <main class="content">
+      <router-outlet />
+    </main>
+  </div>
+</div>
