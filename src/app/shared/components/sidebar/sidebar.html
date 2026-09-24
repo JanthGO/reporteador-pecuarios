@@ -8,43 +8,44 @@
     </div>
 
     <nav class="sidebar__nav">
-      <a class="sidebar__link sidebar__link--active" href="#">
+      <a class="sidebar__link" routerLink="/dashboard" routerLinkActive="sidebar__link--active"
+        ariaCurrentWhenActive="page" (click)="close.emit()">
         <svg lucideLayoutGrid [size]="18"></svg>
         <span>Resumen general</span>
       </a>
-      <a class="sidebar__link" href="#">
+      <a class="sidebar__link" href="#" (click)="close.emit(); $event.preventDefault()">
         <svg lucideMail [size]="18"></svg>
         <span>Campanas</span>
       </a>
-      <a class="sidebar__link" href="#">
+      <a class="sidebar__link" href="#" (click)="close.emit(); $event.preventDefault()">
         <svg lucideImage [size]="18"></svg>
         <span>Banners</span>
       </a>
-      <a class="sidebar__link" href="#">
+      <a class="sidebar__link" href="#" (click)="close.emit(); $event.preventDefault()">
         <svg lucideSyringe [size]="18"></svg>
         <span>Productos</span>
       </a>
-      <a class="sidebar__link" href="#">
+      <a class="sidebar__link" href="#" (click)="close.emit(); $event.preventDefault()">
         <svg lucideFileText [size]="18"></svg>
         <span>Artículos</span>
       </a>
-      <a class="sidebar__link" href="#">
+      <a class="sidebar__link" href="#" (click)="close.emit(); $event.preventDefault()">
         <svg lucideGlobe [size]="18"></svg>
         <span>Micrositio</span>
       </a>
-      <a class="sidebar__link" href="#">
+      <a class="sidebar__link" href="#" (click)="close.emit(); $event.preventDefault()">
         <svg lucideNewspaper [size]="18"></svg>
         <span>Noticias</span>
       </a>
-      <a class="sidebar__link" href="#">
+      <a class="sidebar__link" href="#" (click)="close.emit(); $event.preventDefault()">
         <svg lucideCalendar [size]="18"></svg>
         <span>Eventos</span>
       </a>
-      <a class="sidebar__link" href="#">
+      <a class="sidebar__link" href="#" (click)="close.emit(); $event.preventDefault()">
         <svg lucideVideo [size]="18"></svg>
         <span>Videos</span>
       </a>
-      <a class="sidebar__link sidebar__footer" href="#">
+      <a class="sidebar__footer sidebar__link" href="#" (click)="close.emit(); $event.preventDefault()">
         <svg lucideUsers [size]="18"></svg>
         <span>Usuarios registrados</span>
       </a>

@@ -1,0 +1,136 @@
+<section class="section">
+  <div class="section__header">
+    <div>
+      <h1 class="title-section__heading">Perfil del visitante</h1>
+      <p class="title-section__sub">Conoce las principales características de los usuarios registrados que
+        interactuaron con la marca durante el periodo seleccionado.</p>
+    </div>
+  </div>
+
+  <div class="profile-grid">
+    <!-- Ocupación -->
+    <div class="profile-card">
+      <div class="profile-card__head">
+        <div class="profile-card__icon profile-card__icon--occupation">
+          <svg lucideUser [size]="18"></svg>
+        </div>
+        <span class="profile-card__label">Ocupación</span>
+      </div>
+
+      @if (ocupacionPrincipal(); as item) {
+        <div class="profile-card__featured">
+          <span class="profile-card__featured-name">{{ item.nombre }}</span>
+          <span class="profile-card__featured-value">{{ formatPct(item.promedio) }}</span>
+        </div>
+        <div class="profile-bar">
+          <div class="profile-bar__track">
+            <div class="profile-bar__fill" [style.width.%]="item.promedio ?? 0"></div>
+          </div>
+        </div>
+      } @else {
+        <div class="profile-card__featured">
+          <span class="profile-card__featured-name">&mdash;</span>
+          <span class="profile-card__featured-value">{{ formatPct(undefined) }}</span>
+        </div>
+      }
+
+      <ul class="profile-list">
+        @for (item of ocupacionesSecundarias(); track item.nombre) {
+          <li class="profile-list__item">
+            <span class="profile-list__name">{{ item.nombre }}</span>
+            <span class="profile-list__pct">{{ formatPct(item.promedio) }}</span>
+            <div class="profile-bar profile-bar--sm">
+              <div class="profile-bar__track">
+                <div class="profile-bar__fill" [style.width.%]="item.promedio ?? 0"></div>
+              </div>
+            </div>
+          </li>
+        }
+      </ul>
+    </div>
+
+    <!-- Edad -->
+    <div class="profile-card">
+      <div class="profile-card__head">
+        <div class="profile-card__icon profile-card__icon--age">
+          <svg lucideClock [size]="18"></svg>
+        </div>
+        <span class="profile-card__label">Edad</span>
+      </div>
+
+      @if (edadPrincipal(); as item) {
+        <div class="profile-card__featured">
+          <span class="profile-card__featured-name">{{ item.label }}</span>
+          <span class="profile-card__featured-value">{{ formatPct(item.value) }}</span>
+        </div>
+        <div class="profile-bar">
+          <div class="profile-bar__track">
+            <div class="profile-bar__fill" [style.width.%]="item.value"></div>
+          </div>
+        </div>
+      } @else {
+        <div class="profile-card__featured">
+          <span class="profile-card__featured-name">&mdash;</span>
+          <span class="profile-card__featured-value">{{ formatPct(undefined) }}</span>
+        </div>
+      }
+
+      <ul class="profile-list">
+        @for (item of edadesSecundarias(); track item.label) {
+          <li class="profile-list__item">
+            <span class="profile-list__name">{{ item.label }}</span>
+            <span class="profile-list__pct">{{ formatPct(item.value) }}</span>
+            <div class="profile-bar profile-bar--sm">
+              <div class="profile-bar__track">
+                <div class="profile-bar__fill" [style.width.%]="item.value"></div>
+              </div>
+            </div>
+          </li>
+        }
+      </ul>
+    </div>
+
+    <!-- País -->
+    <div class="profile-card">
+      <div class="profile-card__head">
+        <div class="profile-card__icon profile-card__icon--country">
+          <svg lucideGlobe [size]="18"></svg>
+        </div>
+        <span class="profile-card__label">Pa&iacute;s</span>
+      </div>
+
+       @if (paisPrincipal(); as item) {
+        <div class="profile-card__featured">
+          <span class="profile-card__featured-name">{{ item.nombre }}</span>
+          <span class="profile-card__featured-value">{{ formatPct(item.promedio) }}</span>
+        </div>
+        <div class="profile-bar">
+          <div class="profile-bar__track">
+            <div class="profile-bar__fill" [style.width.%]="item.promedio ?? 0"></div>
+          </div>
+        </div>
+      } @else {
+        <div class="profile-card__featured">
+          <span class="profile-card__featured-name">&mdash;</span>
+          <span class="profile-card__featured-value">{{ formatPct(undefined) }}</span>
+        </div>
+      }
+
+      <ul class="profile-list">
+        @for (item of paisesSecundarios(); track item.nombre) {
+          <li class="profile-list__item">
+            <span class="profile-list__name">{{ item.nombre }}</span>
+            <span class="profile-list__pct">{{ formatPct(item.promedio) }}</span>
+            <div class="profile-bar profile-bar--sm">
+              <div class="profile-bar__track">
+                <div class="profile-bar__fill" [style.width.%]="item.promedio ?? 0"></div>
+              </div>
+            </div>
+          </li>
+        }
+      </ul>
+    </div>
+  </div>
+
+  <p class="section__footnote">Datos basados en las visitas de usuarios registrados en {{ sitio() }}.</p>
+</section>
