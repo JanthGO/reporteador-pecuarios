@@ -3,8 +3,9 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
-import { provideHttpClient, withFetch, withInterceptorsFromDi, HttpInterceptorFn } from '@angular/common/http';
+import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { provideHighcharts } from 'highcharts-angular';
+import { authInterceptor } from './core/interceptors/auth.interceptor';
 import {
   provideLucideIcons,
   LucideMail,
@@ -37,7 +38,7 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
     provideClientHydration(),
-    provideHttpClient(withFetch()),
+    provideHttpClient(withFetch(), withInterceptors([authInterceptor])),
     provideHighcharts(),
     provideLucideIcons(
       LucideMail,
