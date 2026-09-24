@@ -1,9 +1,8 @@
-
 .content-card {
+  padding: var(--space-5);
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  padding: var(--space-5);
   cursor: pointer;
   transition:
     box-shadow var(--duration-normal) var(--ease-out),
@@ -17,8 +16,8 @@
 }
 
 .content-card--selected {
-  border-color: var(--color-primary);
   background: oklch(0.97 0.02 256);
+  border-color: var(--color-primary);
 }
 
 .content-card--selected:hover {
@@ -34,13 +33,13 @@
 }
 
 .content-card__icon {
-  width: 28px;
-  height: 28px;
-  border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 28px;
+  height: 28px;
   flex-shrink: 0;
+  border-radius: var(--radius-sm);
 }
 
 .content-card__icon--products {
@@ -85,12 +84,12 @@
 }
 
 .content-card__name {
-  font-size: 0.8125rem;
-  font-weight: 500;
-  color: var(--color-ink-secondary);
-  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--color-ink-secondary);
+  font-size: 0.8125rem;
+  font-weight: 500;
 }
 
 .content-card__sparkline {
@@ -101,36 +100,14 @@
 }
 
 .content-card__count {
+  color: var(--color-ink);
   font-size: 1.25rem;
   font-weight: 700;
-  letter-spacing: -0.02em;
-  color: var(--color-ink);
   line-height: 1.2;
+  letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums;
 }
 
 .content-card__count--zero {
   color: var(--color-ink-muted);
-}
-
-.content-card__trend {
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-  font-size: 0.6875rem;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-}
-
-.content-card__trend--up {
-  color: var(--color-success);
-}
-
-.content-card__trend--down {
-  color: var(--color-danger);
-}
-
-.content-card__trend--neutral {
-  color: var(--color-ink-muted);
-  font-weight: 400;
 }

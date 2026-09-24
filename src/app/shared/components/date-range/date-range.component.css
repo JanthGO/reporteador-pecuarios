@@ -4,36 +4,42 @@
 
 /* ── Trigger button ── */
 
-.date-range-trigger {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2, 0.5rem);
-  padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
-  background: var(--color-surface, #fff);
-  border: 1px solid var(--color-border, #e2e8f0);
-  border-radius: var(--radius-sm, 0.375rem);
-  font-size: 0.8125rem;
+.date-range-trigger,
+.date-range-field__input {
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-ink);
   font-family: inherit;
-  color: var(--color-ink, #1a202c);
-  cursor: pointer;
+  font-size: 0.8125rem;
   transition:
     border-color 150ms ease,
     box-shadow 150ms ease;
 }
 
+.date-range-trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  cursor: pointer;
+}
+
 .date-range-trigger:hover {
-  border-color: var(--color-border-strong, #cbd5e1);
+  border-color: var(--color-border-strong);
 }
 
-.date-range-trigger:focus-visible {
-  border-color: var(--color-sitio, #2563eb);
-  box-shadow: 0 0 0 3px oklch(0.55 0.15 256 / 0.15);
+.date-range-trigger:focus-visible,
+.date-range-field__input:focus {
   outline: none;
+  border-color: var(--color-sitio);
+  box-shadow: 0 0 0 3px oklch(0.55 0.15 256 / 0.15);
 }
 
-.date-range-trigger__icon {
-  color: var(--color-ink-muted, #94a3b8);
+.date-range-trigger__icon,
+.date-range-trigger__chevron {
   flex-shrink: 0;
+  color: var(--color-ink-muted);
 }
 
 .date-range-trigger__text {
@@ -42,8 +48,6 @@
 }
 
 .date-range-trigger__chevron {
-  color: var(--color-ink-muted, #94a3b8);
-  flex-shrink: 0;
   transition: transform 200ms ease;
 }
 
@@ -59,23 +63,23 @@
   right: 0;
   z-index: 50;
   min-width: 320px;
-  background: var(--color-surface, #fff);
-  border: 1px solid var(--color-border, #e2e8f0);
-  border-radius: var(--radius-md, 0.5rem);
+  padding: var(--space-4);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
   box-shadow:
     0 4px 6px -1px oklch(0 0 0 / 0.1),
     0 2px 4px -2px oklch(0 0 0 / 0.1);
-  padding: var(--space-4, 1rem);
 }
 
 .date-range-dropdown__header {
-  margin-bottom: var(--space-4, 1rem);
+  margin-bottom: var(--space-4);
 }
 
 .date-range-dropdown__title {
+  color: var(--color-ink);
   font-size: 0.875rem;
   font-weight: 600;
-  color: var(--color-ink, #1a202c);
 }
 
 /* ── Fields ── */
@@ -83,55 +87,39 @@
 .date-range-dropdown__fields {
   display: flex;
   align-items: flex-end;
-  gap: var(--space-3, 0.75rem);
+  gap: var(--space-3);
 }
 
 .date-range-field {
-  flex: 1;
   display: flex;
+  flex: 1;
   flex-direction: column;
-  gap: var(--space-1, 0.25rem);
+  gap: var(--space-1);
 }
 
 .date-range-field__label {
+  color: var(--color-ink-secondary);
   font-size: 0.75rem;
   font-weight: 500;
-  color: var(--color-ink-secondary, #64748b);
 }
 
 .date-range-field__input {
   width: 100%;
-  padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
-  border: 1px solid var(--color-border, #e2e8f0);
-  border-radius: var(--radius-sm, 0.375rem);
-  font-size: 0.8125rem;
-  font-family: inherit;
-  color: var(--color-ink, #1a202c);
-  background: var(--color-surface, #fff);
-  transition:
-    border-color 150ms ease,
-    box-shadow 150ms ease;
-}
-
-.date-range-field__input:focus {
-  outline: none;
-  border-color: var(--color-sitio, #2563eb);
-  box-shadow: 0 0 0 3px oklch(0.55 0.15 256 / 0.15);
 }
 
 .date-range-dropdown__separator {
-  font-size: 1rem;
-  color: var(--color-ink-muted, #94a3b8);
-  padding-bottom: var(--space-2, 0.5rem);
   flex-shrink: 0;
+  color: var(--color-ink-muted);
+  font-size: 1rem;
+  padding-bottom: var(--space-2);
 }
 
 /* ── Error ── */
 
 .date-range-dropdown__error {
+  margin: var(--space-3) 0 0;
+  color: var(--color-danger);
   font-size: 0.75rem;
-  color: var(--color-danger, #dc2626);
-  margin: var(--space-3, 0.75rem) 0 0;
 }
 
 /* ── Actions ── */
@@ -139,19 +127,19 @@
 .date-range-dropdown__actions {
   display: flex;
   justify-content: flex-end;
-  gap: var(--space-2, 0.5rem);
-  margin-top: var(--space-4, 1rem);
-  padding-top: var(--space-3, 0.75rem);
-  border-top: 1px solid var(--color-border, #e2e8f0);
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-border);
 }
 
 .date-range-btn {
-  padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
-  border-radius: var(--radius-sm, 0.375rem);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-family: inherit;
   font-size: 0.8125rem;
   font-weight: 500;
-  font-family: inherit;
-  cursor: pointer;
   transition:
     background 150ms ease,
     color 150ms ease;
@@ -159,23 +147,23 @@
 
 .date-range-btn--ghost {
   background: transparent;
-  border: 1px solid var(--color-border, #e2e8f0);
-  color: var(--color-ink-secondary, #64748b);
+  border: 1px solid var(--color-border);
+  color: var(--color-ink-secondary);
 }
 
 .date-range-btn--ghost:hover {
-  background: var(--color-bg, #f8fafc);
-  color: var(--color-ink, #1a202c);
+  background: var(--color-bg);
+  color: var(--color-ink);
 }
 
 .date-range-btn--primary {
-  background: var(--color-sitio, #2563eb);
-  border: 1px solid var(--color-sitio, #2563eb);
+  background: var(--color-sitio);
+  border: 1px solid var(--color-sitio);
   color: #fff;
 }
 
 .date-range-btn--primary:hover {
-  background: var(--color-sitio-light, #1d4ed8);
+  background: var(--color-sitio-light);
 }
 
 /* ── Responsive ── */
@@ -188,14 +176,14 @@
     left: 0;
     right: 0;
     min-width: 0;
-    border-radius: var(--radius-md, 0.5rem) var(--radius-md, 0.5rem) 0 0;
     max-height: 80vh;
     overflow-y: auto;
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
   }
 
   .date-range-dropdown__fields {
     flex-direction: column;
-    gap: var(--space-3, 0.75rem);
+    gap: var(--space-3);
   }
 
   .date-range-dropdown__separator {

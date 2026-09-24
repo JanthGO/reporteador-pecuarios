@@ -7,26 +7,26 @@
 }
 
 .title-section__heading {
+  margin: 0 0 var(--space-1);
+  color: var(--color-ink);
   font-size: 1.5rem;
   font-weight: 700;
-  letter-spacing: -0.02em;
-  color: var(--color-ink);
-  margin: 0 0 var(--space-1);
   line-height: 1.2;
+  letter-spacing: -0.02em;
 }
 
 .title-section__sub {
-  font-size: 0.875rem;
-  color: var(--color-ink-secondary);
   margin: 0;
+  color: var(--color-ink-secondary);
+  font-size: 0.875rem;
 }
 
 .section__footnote {
-  font-size: 0.75rem;
-  color: var(--color-ink-muted);
   margin: var(--space-5) 0 0;
   border-top: 1px solid var(--color-border);
   text-align: right;
+  color: var(--color-ink-muted);
+  font-size: 0.75rem;
 }
 
 .profile-grid {
@@ -36,10 +36,10 @@
 }
 
 .profile-card {
+  padding: var(--space-5);
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  padding: var(--space-5);
 }
 
 .profile-card__head {
@@ -50,13 +50,13 @@
 }
 
 .profile-card__icon {
-  width: 34px;
-  height: 34px;
-  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 34px;
+  height: 34px;
   flex-shrink: 0;
+  border-radius: 8px;
 }
 
 .profile-card__icon--occupation {
@@ -75,9 +75,9 @@
 }
 
 .profile-card__label {
+  color: var(--color-ink);
   font-size: 0.875rem;
   font-weight: 600;
-  color: var(--color-ink);
 }
 
 .profile-card__featured {
@@ -88,18 +88,17 @@
   margin-bottom: var(--space-3);
 }
 
-
 .profile-card__featured-name {
+  color: var(--color-ink);
   font-size: 0.9375rem;
   font-weight: 600;
-  color: var(--color-ink);
 }
 
 .profile-card__featured-value {
+  color: var(--color-primary);
   font-size: 1.25rem;
   font-weight: 700;
   letter-spacing: -0.02em;
-  color: var(--color-primary);
   font-variant-numeric: tabular-nums;
 }
 
@@ -109,9 +108,9 @@
 
 .profile-bar__track {
   height: 6px;
+  overflow: hidden;
   background: oklch(0.94 0.005 185);
   border-radius: var(--radius-full);
-  overflow: hidden;
 }
 
 .profile-bar__fill {
@@ -130,12 +129,12 @@
 }
 
 .profile-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 .profile-list__item {
@@ -146,26 +145,20 @@
 }
 
 .profile-list__name {
-  font-size: 0.8125rem;
   color: var(--color-ink-secondary);
+  font-size: 0.8125rem;
 }
 
 .profile-list__pct {
+  text-align: right;
+  color: var(--color-ink);
   font-size: 0.8125rem;
   font-weight: 600;
-  color: var(--color-ink);
   font-variant-numeric: tabular-nums;
-  text-align: right;
 }
 
 .profile-list__item .profile-bar--sm {
   grid-column: 1 / -1;
-}
-
-.profile-card__note {
-  font-size: 0.75rem;
-  color: var(--color-ink-muted);
-  margin: var(--space-4) 0 0;
 }
 
 @media (max-width: 1024px) {

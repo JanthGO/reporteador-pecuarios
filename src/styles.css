@@ -3,27 +3,24 @@
 /* ── Design tokens ── */
 
 :root {
-  /* [ COLORES SITIOS ] */
+  /* [ COLORES SITIO ] */
   /* PORCICULTURA */
   /* --color-sitio: #ab0f08;    */
   /* GANADERIA */
   --color-sitio: #0F261D;
   --color-sitio-light: #133D2B;
-  /*-> AVICULTURA */
+  /* AVICULTURA */
   /*--color-sitio: #d7ad52;*/
 
-  /* [ FONDOS ] */
-  --fondo-gris: #eeeeee;
-
   /* Primary */
-  --color-primary: #0F261D;
-  --color-primary-light: #133D2B;
+  --color-primary: var(--color-sitio);
+  --color-primary-light: var(--color-sitio-light);
   --color-primary-lighter: oklch(0.92 0.04 185);
 
-  /* Surface */
+  /* Fondos */
+  --fondo-gris: #eeeeee;
   --color-bg: oklch(0.975 0.003 256);
   --color-surface: oklch(1.000 0.000 0);
-  --color-surface-raised: oklch(1.000 0.000 0);
 
   /* Ink */
   --color-ink: oklch(0.18 0.01 256);
@@ -31,10 +28,7 @@
   --color-ink-muted: oklch(0.62 0.008 256);
 
   /* Status */
-  --color-success: oklch(0.62 0.17 155);
-  --color-success-light: oklch(0.92 0.04 155);
   --color-danger: oklch(0.58 0.22 25);
-  --color-info: oklch(0.55 0.16 256);
 
   /* Borders */
   --color-border: oklch(0.92 0.005 256);
@@ -49,13 +43,10 @@
   --space-6: 1.5rem;
   --space-8: 2rem;
   --space-10: 2.5rem;
-  --space-12: 3rem;
-  --space-16: 4rem;
 
   /* Radius */
   --radius-sm: 0.375rem;
   --radius-md: 0.5rem;
-  --radius-lg: 0.75rem;
   --radius-full: 9999px;
 
   /* Shadows */
@@ -69,16 +60,10 @@
   --duration-normal: 200ms;
   --duration-slow: 350ms;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 
   /* Z-index */
-  --z-base: 0;
   --z-dropdown: 100;
   --z-sticky: 200;
-  --z-modal-backdrop: 300;
-  --z-modal: 400;
-  --z-toast: 500;
-  --z-tooltip: 600;
 }
 
 /* ── Reset & base ── */
@@ -106,7 +91,6 @@ body {
 /* ── Reduced motion ── */
 
 @media (prefers-reduced-motion: reduce) {
-
   *,
   *::before,
   *::after {

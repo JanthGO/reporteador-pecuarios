@@ -8,28 +8,28 @@
 }
 
 .title-section__heading {
+  margin: 0 0 var(--space-1);
+  color: var(--color-ink);
   font-size: 1.5rem;
   font-weight: 700;
-  letter-spacing: -0.02em;
-  color: var(--color-ink);
-  margin: 0 0 var(--space-1);
   line-height: 1.2;
+  letter-spacing: -0.02em;
 }
 
 .title-section__sub {
-  font-size: 0.875rem;
-  color: var(--color-ink-secondary);
   margin: 0;
+  color: var(--color-ink-secondary);
+  font-size: 0.875rem;
 }
 
 /* ── Lista de actividades ── */
 
 .activity-list {
-  margin: 0;
-  padding: 0;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: var(--space-2);
+  margin: 0;
+  padding: 0;
 }
 
 .activity-card {
@@ -59,9 +59,9 @@
   justify-content: center;
   width: 40px;
   height: 40px;
-  border-radius: var(--radius-sm);
   flex-shrink: 0;
   background: oklch(0.95 0.01 260);
+  border-radius: var(--radius-sm);
   color: var(--color-ink-muted);
 }
 
@@ -70,17 +70,16 @@
 }
 
 .activity-card__body {
-  flex: 1;
-  min-width: 0;
   display: flex;
+  flex: 1;
   flex-direction: column;
   gap: var(--space-1);
+  min-width: 0;
 }
 
 .activity-card__titleline {
   display: flex;
   align-items: center;
-  flex-wrap: nowrap;
   justify-content: space-between;
   gap: var(--space-2);
   min-width: 0;
@@ -88,10 +87,10 @@
 
 .activity-card__title {
   margin: 0;
+  color: var(--color-ink);
   font-size: 0.9375rem;
   font-weight: 600;
   line-height: 1.35;
-  color: var(--color-ink);
   overflow-wrap: anywhere;
 }
 
@@ -147,10 +146,10 @@
 .activity-card__meta {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
   gap: var(--space-2);
-  font-size: 0.8125rem;
   color: var(--color-ink-secondary);
+  font-size: 0.8125rem;
+  flex-wrap: wrap;
 }
 
 .activity-card__date {
@@ -170,8 +169,8 @@
 }
 
 .activity-card__platform-icon {
-  opacity: 0.65;
   flex-shrink: 0;
+  opacity: 0.65;
 }
 
 /* ── Estado vacío ── */
@@ -196,23 +195,23 @@
   width: 48px;
   height: 48px;
   margin-bottom: var(--space-2);
-  border-radius: var(--radius-full);
   background: var(--color-primary-lighter);
+  border-radius: var(--radius-full);
   color: var(--color-primary);
 }
 
 .activity-empty__title {
   margin: 0;
+  color: var(--color-ink);
   font-size: 0.9375rem;
   font-weight: 600;
-  color: var(--color-ink);
 }
 
 .activity-empty__detail {
   margin: 0;
   max-width: 38ch;
-  font-size: 0.8125rem;
   color: var(--color-ink-secondary);
+  font-size: 0.8125rem;
 }
 
 /* ── Responsive ── */
