@@ -10,7 +10,6 @@ import { HighchartsChartComponent } from 'highcharts-angular';
 import { PerformanceCard } from './components/performance-card/performance-card';
 import { VisitorProfile } from './components/visitor-profile/visitor-profile';
 import { RecentActivity } from './components/recent-activity/recent-activity';
-import { ActivityItem } from './components/recent-activity/recent-activity.types';
 import type Highcharts from 'highcharts';
 import {
   LucideDownload,
@@ -19,7 +18,9 @@ import {
   LucideCalendarDays,
 } from '@lucide/angular';
 import { ResponsePerfilVisitante, PerfilVisitante } from '../../core/interfaces/dashboard/PerfilVisitante';
-import { Header } from '../../shared/components/header/header';
+import { ActivityItem, UltimasVisitas } from '../../core/interfaces/dashboard/ActividadReciente';
+import { mapUltimasVisitasToActivity } from './recent-activity.mapper';
+import { Footer } from '../../shared/components/footer/footer';
 
 @Component({
   selector: 'app-dashboard',
@@ -34,8 +35,9 @@ imports: [
     LucideDownload,
     LucideEye,
     LucideCalendarRange,
-    LucideCalendarDays
-  ],
+    LucideCalendarDays,
+    Footer
+],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
 })
@@ -68,6 +70,8 @@ export class DashboardComponent implements OnInit {
 
   readonly perfilData = signal<Map<string, ResponsePerfilVisitante>>(new Map());
 
+  readonly recentActivityData = signal<Map<string, UltimasVisitas[]>>(new Map());
+
   /** Indica si se está cargando el perfil del visitante del rango actual. */
   protected readonly perfilLoading = signal(false);
 
@@ -81,6 +85,12 @@ export class DashboardComponent implements OnInit {
     () => this.perfilData().get(this.currentRangeKey())?.data ?? null,
   );
 
+  /** Actividad reciente del rango seleccionado, mapeada al modelo de la vista. */
+  protected readonly recentActivity = computed<ActivityItem[]>(() => {
+    const rows = this.recentActivityData().get(this.currentRangeKey()) ?? [];
+    return mapUltimasVisitasToActivity(rows);
+  });
+
   chartTitle = 'Visitas a la marca';
 
   /** Definición estática de las secciones de contenido disponibles. */
@@ -89,7 +99,7 @@ export class DashboardComponent implements OnInit {
       key: 'productos',
       nombre: 'Productos',
       iconClass: 'content-card__icon--products',
-      iconName: 'shopping-bag',
+      iconName: 'syringe',
     },
     {
       key: 'articulos',
@@ -133,15 +143,6 @@ export class DashboardComponent implements OnInit {
   readonly chartTabs: { key: string; label: string }[] = [
     { key: 'total', label: 'Total' },
     ...this.sections.map(s => ({ key: s.key, label: s.nombre })),
-  ];
-
-  /** Interacciones recientes de los usuarios hacia la marca. */
-  protected readonly recentActivity: ActivityItem[] = [
-    { fechaHora: '15 sep 2026 · 11:11', seccion: 'Productos', seccionClass: 'activity-badge--productos', contenido: 'Daimetoprim®', plataforma: 'Móvil' },
-    { fechaHora: '15 sep 2026 · 11:11', seccion: 'Productos', seccionClass: 'activity-badge--productos', contenido: 'Daimetoprim®', plataforma: 'Móvil' },
-    { fechaHora: '15 sep 2026 · 11:09', seccion: 'Productos', seccionClass: 'activity-badge--productos', contenido: 'Imidocarb Sanfer®', plataforma: 'Web' },
-    { fechaHora: '15 sep 2026 · 10:44', seccion: 'Productos', seccionClass: 'activity-badge--productos', contenido: 'Flunixin Sanfer®', plataforma: 'Móvil' },
-    { fechaHora: '15 sep 2026 · 10:44', seccion: 'Productos', seccionClass: 'activity-badge--productos', contenido: 'Flunixin Sanfer®', plataforma: 'Móvil' },
   ];
 
   private chartInstance: Highcharts.Chart | null = null;
@@ -493,6 +494,7 @@ export class DashboardComponent implements OnInit {
     }
 
     this.loadPerfil(range);
+    this.loadRecentActivity(range);
   }
 
   /**
@@ -529,6 +531,43 @@ export class DashboardComponent implements OnInit {
         },
         error: () => {
           this.perfilLoading.set(false);
+        },
+      });
+  }
+
+  /**
+   * Carga las últimas interacciones para el rango dado, con caché en memoria.
+   *
+   * - Si el rango ya fue consultado, se reutiliza la respuesta cacheadada en
+   *   `recentActivityData` y no se hace otra petición HTTP.
+   * - Las filas crudas se guardan tal cual; el mapeo a `ActivityItem` ocurre
+   *   de forma derivada en `recentActivity` (computed), usando el mapper del módulo.
+   *
+   * @param range - Rango de fechas a consultar.
+   */
+  private loadRecentActivity(range: DateRange): void {
+    const empresa = this.usuario()?.empresa;
+    if (!empresa) return;
+
+    if (this.recentActivityData().has(this.currentRangeKey())) return;
+
+    this.visitasService
+      .ultimasVisitas(environment.division, empresa, range.fecha_fin)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res) => {
+          this.recentActivityData.update((map) => {
+            const next = new Map(map);
+            next.set(this.currentRangeKey(), Array.isArray(res.data) ? res.data : []);
+            return next;
+          });
+        },
+        error: () => {
+          this.recentActivityData.update((map) => {
+            const next = new Map(map);
+            next.set(this.currentRangeKey(), []);
+            return next;
+          });
         },
       });
   }

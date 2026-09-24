@@ -32,6 +32,7 @@ import {
   LucideMonitor,
   LucideChevronDown,
   LucideMenu,
+  LucideActivity,
 } from '@lucide/angular';
 
 export const appConfig: ApplicationConfig = {
@@ -66,6 +67,7 @@ export const appConfig: ApplicationConfig = {
       LucideMonitor,
       LucideChevronDown,
       LucideMenu,
+      LucideActivity,
     ),
   ]
 };

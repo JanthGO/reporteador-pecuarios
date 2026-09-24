@@ -31,3 +31,8 @@ export interface porcentajeEdad {
     entre50y60: number;
     mas60:      number;
 }
+
+export interface AgeBucket {
+  label: string;
+  value: number;
+}

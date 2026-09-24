@@ -83,7 +83,9 @@
 </section>
 
 <!-- Visitor profile -->
-<app-visitor-profile [perfil]="perfilActual()" [sitio]="sitio"></app-visitor-profile>
+<app-visitor-profile [perfil]="perfilActual()"></app-visitor-profile>
 
 <!-- Recent activity -->
-<app-recent-activity [items]="recentActivity"></app-recent-activity>
+<app-recent-activity [actividad]="recentActivity()"></app-recent-activity>
+
+<app-footer></app-footer>

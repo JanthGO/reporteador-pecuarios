@@ -45,3 +45,4 @@ Thumbs.db
 
 # Screenshots
 *.png
+*.component.spec.ts

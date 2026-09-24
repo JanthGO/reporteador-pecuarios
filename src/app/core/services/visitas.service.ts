@@ -5,6 +5,7 @@ import { retryWhen, mergeMap, finalize } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { ResponseVisitasTotales, RetryConfig } from '../interfaces/dashboard/visitas';
 import { ResponsePerfilVisitante } from '../interfaces/dashboard/PerfilVisitante';
+import { ResponseUltimasVisitas } from '../interfaces/dashboard/ActividadReciente';
 
 
 /** Configuración por defecto: 2 reintentos con 1200 ms de retardo progresivo. */
@@ -75,6 +76,34 @@ export class VisitasService {
   }
 
   /**
+   * Obtiene las últimas interacciones de los usuarios con la marca
+   * (productos, artículos, noticias, etc.) para una división y empresa.
+   *
+   * *La fecha `fecha_fin` se usa para acotar la consulta; con cadena vacía
+   * el endpoint devuelve el periodo completo.*
+   *
+   * **Mapeo:** las filas crudas (`UltimasVisitas`) se transforman al modelo
+   * de vista `ActivityItem` con `mapUltimasVisitasToActivity`, fuera del
+   * servicio (módulo del dashboard).
+   *
+   * @param division   - ID de la división (1 = Porcicultura, 2 = Ganadería, 3 = Avicultura).
+   * @param empresa    - ID de la empresa del usuario autenticado.
+   * @param fecha_fin  - Fecha de fin en formato ISO `YYYY-MM-DD`. Cadena vacía para omitir.
+   * @returns Un `Observable` con la respuesta de las últimas visitas.
+   */
+  ultimasVisitas(
+    division: number,
+    empresa: number,
+    fecha_fin: string = '',
+  ): Observable<ResponseUltimasVisitas> {
+    return this.http.get<ResponseUltimasVisitas>(
+      `${environment.api}last-visits/${division}/${empresa}/${fecha_fin}`,
+    ).pipe(
+      retryWhen(this.buildRetryLogic(DEFAULT_RETRY)),
+    );
+  }
+
+  /**
    * Construye la lógica de reintentos con retardo progresivo.
    *
    * Cada reintento espera `delayMs * intento` milisegundos antes de reintentar.
@@ -123,5 +152,5 @@ export class VisitasService {
     );
   }
 
-  
+
 }
