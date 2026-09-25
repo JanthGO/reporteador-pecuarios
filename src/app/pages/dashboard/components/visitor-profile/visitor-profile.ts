@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { LucideUser, LucideClock, LucideGlobe } from '@lucide/angular';
 import { AgeBucket, PerfilVisitante, info } from '../../../../core/interfaces/dashboard/PerfilVisitante';
+import { environment } from '../../../../../environments/environment';
 
 
 @Component({
@@ -13,14 +14,7 @@ import { AgeBucket, PerfilVisitante, info } from '../../../../core/interfaces/da
 })
 export class VisitorProfile {
   readonly perfil = input<PerfilVisitante | null>(null);
-  readonly sitio = input(this.storedSite());
-
-  /** Nombre del sitio (dominio) a mostrar en la nota al pie, con fallback a localStorage. */
-  private storedSite(): string {
-    if (typeof localStorage === 'undefined') return '';
-    return localStorage.getItem('sitio') ?? '';
-  }
-
+  readonly sitio = environment.nombre_dominio;
   /** Top de ocupaciones (hasta 7). Se ordena descendentemente por el backend. */
   protected readonly ocupaciones = computed<info[]>(
     () => (this.perfil()?.ocupaciones ?? []).slice(0, 7),

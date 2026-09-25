@@ -36,6 +36,10 @@
   align-items: center;
   gap: var(--space-3);
   flex-shrink: 0;
+  @media (max-width: 768px) {
+    flex-direction: column;
+    width: 100%;
+  }
 }
 
 /* ── Date range wrapper ── */
@@ -175,11 +179,16 @@
 }
 
 .chart-tabs {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
   gap: 2px;
   padding: 3px;
   background: var(--color-bg);
   border-radius: var(--radius-sm);
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+ 
 }
 
 .chart-tab {
