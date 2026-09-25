@@ -22,7 +22,7 @@ describe('DateRangeComponent', () => {
     const today = new Date();
     const expectedFin = formatDate(today);
     const expectedInicio = new Date();
-    expectedInicio.setMonth(expectedInicio.getMonth() - 1);
+    expectedInicio.setFullYear(expectedInicio.getFullYear() - 1);
 
     expect(component.fechaInicio()).toBe(formatDate(expectedInicio));
     expect(component.fechaFin()).toBe(expectedFin);
@@ -96,7 +96,7 @@ describe('DateRangeComponent', () => {
     component.onClear();
     const today = new Date();
     const expectedInicio = new Date();
-    expectedInicio.setMonth(expectedInicio.getMonth() - 1);
+    expectedInicio.setFullYear(expectedInicio.getFullYear() - 1);
     expect(component.fechaInicio()).toBe(formatDate(expectedInicio));
     expect(component.fechaFin()).toBe(formatDate(today));
   });
