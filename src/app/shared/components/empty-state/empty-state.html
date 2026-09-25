@@ -1,0 +1,15 @@
+<div
+  class="state"
+  [class.state--danger]="tone() === 'danger'"
+  [attr.role]="tone() === 'danger' ? 'alert' : null"
+>
+  @if (icon(); as nombre) {
+    <div class="state__icon" aria-hidden="true">
+      <svg [lucideIcon]="nombre" [size]="22"></svg>
+    </div>
+  }
+  <p class="state__title">{{ title() }}</p>
+  @if (detail()) {
+    <p class="state__detail">{{ detail() }}</p>
+  }
+</div>

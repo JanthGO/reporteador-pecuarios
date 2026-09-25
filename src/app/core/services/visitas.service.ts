@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable, timer, throwError } from 'rxjs';
 import { retryWhen, mergeMap, finalize } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
-import { ResponseVisitasTotales, RetryConfig } from '../interfaces/dashboard/visitas';
+import { ResponseSecciones, ResponseVisitasTotales, RetryConfig } from '../interfaces/dashboard/visitas';
 import { ResponsePerfilVisitante } from '../interfaces/dashboard/PerfilVisitante';
 import { ResponseUltimasVisitas } from '../interfaces/dashboard/ActividadReciente';
 
@@ -48,12 +48,6 @@ export class VisitasService {
    * Obtiene el perfil demográfico del visitante: totales, género por rango de
    * edad, top de ocupaciones y top de países para la división y empresa dadas.
    *
-   * **Permisos:** requiere sesión autenticada. El interceptor `authInterceptor`
-   * adjunta el token `Authorization: Bearer` a la petición.
-   *
-   * **Caché:** la respuesta es agregada (volumen acotado), por lo que el
-   * dashboard la cachea en memoria por rango de fechas; no requiere paginación.
-   *
    * @param division   - ID de la división (1 = Porcicultura, 2 = Ganadería, 3 = Avicultura).
    * @param empresa    - ID de la empresa del usuario autenticado.
    * @param fecha_inicio - Fecha de inicio en formato ISO `YYYY-MM-DD`. Cadena vacía para omitir.
@@ -77,14 +71,7 @@ export class VisitasService {
 
   /**
    * Obtiene las últimas interacciones de los usuarios con la marca
-   * (productos, artículos, noticias, etc.) para una división y empresa.
-   *
-   * *La fecha `fecha_fin` se usa para acotar la consulta; con cadena vacía
-   * el endpoint devuelve el periodo completo.*
-   *
-   * **Mapeo:** las filas crudas (`UltimasVisitas`) se transforman al modelo
-   * de vista `ActivityItem` con `mapUltimasVisitasToActivity`, fuera del
-   * servicio (módulo del dashboard).
+   * (productos, artículos, noticias, etc.) para una división y empresa)
    *
    * @param division   - ID de la división (1 = Porcicultura, 2 = Ganadería, 3 = Avicultura).
    * @param empresa    - ID de la empresa del usuario autenticado.
@@ -99,6 +86,22 @@ export class VisitasService {
     return this.http.get<ResponseUltimasVisitas>(
       `${environment.api}last-visits/${division}/${empresa}/${fecha_fin}`,
     ).pipe(
+      retryWhen(this.buildRetryLogic(DEFAULT_RETRY)),
+    );
+  }
+
+  /** 
+  * Obtiene las visitas y los contenidos de una sección específica.
+  * 
+  * @param division   - ID de la división (1 = Porcicultura, 2 = Ganadería, 3 = Avicultura).
+  * @param empresa    - ID de la empresa del usuario autenticado.
+  * @param tipo       - Clave de la sección a consultar (e.g. `'productos'`, `'articulos'`).
+  * @param fecha_inicio - Fecha de inicio en formato ISO `YYYY-MM-DD`. Cadena vacía para omitir.
+  * @param fecha_fin    - Fecha de fin en formato ISO `YYYY-MM-DD`. Cadena vacía para omitir.
+  * @returns Un `Observable` con la respuesta de las visitas y los contenidos.
+  */
+  seccion( division: number, empresa: number, tipo: string, fecha_inicio: string = '', fecha_fin: string = '' ){
+    return this.http.get<ResponseSecciones>(`${environment.api}visits/${division}/${empresa}/${tipo}/${fecha_inicio}/${fecha_fin}`).pipe(
       retryWhen(this.buildRetryLogic(DEFAULT_RETRY)),
     );
   }

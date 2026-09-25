@@ -1,0 +1,113 @@
+<div class="kpi-strip">
+  <!-- Total de visualizaciones y su evolución -->
+  <div class="kpi-card kpi-card--featured">
+    @if (loading()) {
+      <div class="skeleton skeleton--label"></div>
+      <div class="skeleton skeleton--figure"></div>
+      <div class="skeleton skeleton--chart"></div>
+    } @else {
+      <div class="kpi-card__header">
+        <span class="kpi-card__label">Visualizaciones a productos</span>
+      </div>
+
+      <p class="kpi-card__value">
+        {{ formatNumber(totalVisitas()) }}
+        <span class="kpi-card__unit">visualizaciones</span>
+      </p>
+
+      @if (serieVisitas().length > 0) {
+        <div class="kpi-card__chart">
+          <highcharts-chart
+            [options]="chartOptions()"
+            [update]="true"
+            [oneToOne]="true"
+          ></highcharts-chart>
+        </div>
+
+        <div class="kpi-card__footer">
+          <span class="kpi-card__stat">
+            <svg lucideCalendarDays [size]="14"></svg>
+            {{ formatNumber(promedioDiario()) }} de promedio diario
+          </span>
+          @if (pico(); as dia) {
+            <span class="kpi-card__sep" aria-hidden="true">·</span>
+            <span class="kpi-card__stat">
+              <svg lucideTrendingUp [size]="14"></svg>
+              Pico de {{ formatNumber(dia.visitas) }} el {{ formatDia(dia.fecha) }}
+            </span>
+          }
+        </div>
+      } @else {
+        <p class="kpi-card__hint">Sin serie diaria registrada en este periodo</p>
+      }
+    }
+  </div>
+
+  <!-- Productos publicados -->
+  <div class="kpi-card">
+    @if (loading()) {
+      <div class="skeleton skeleton--label"></div>
+      <div class="skeleton skeleton--figure"></div>
+      <div class="skeleton skeleton--line"></div>
+    } @else {
+      <div class="kpi-card__header">
+        <span class="kpi-card__label">Productos publicados</span>
+      </div>
+
+      <p class="kpi-card__value">
+        {{ formatNumber(totalProductos()) }}
+        <span class="kpi-card__unit">
+          {{ totalProductos() === 1 ? 'producto' : 'productos' }}
+        </span>
+      </p>
+
+      <div class="kpi-card__footer">
+        <span class="kpi-card__stat">
+          <svg lucideActivity [size]="14"></svg>
+          {{ formatNumber(conVisitas()) }} con visitas en el periodo
+        </span>
+      </div>
+    }
+  </div>
+
+  <!-- Producto más visitado -->
+  <div class="kpi-card">
+    @if (loading()) {
+      <div class="skeleton skeleton--label"></div>
+      <div class="skeleton skeleton--block"></div>
+      <div class="skeleton skeleton--line"></div>
+    } @else {
+      <div class="kpi-card__header">
+        <span class="kpi-card__label">Producto más visitado</span>
+      </div>
+
+      @if (topProducto(); as destacado) {
+        <div class="top-product">
+          <span class="top-product__thumb" aria-hidden="true">
+            @if (imagenTopFallida() || !destacado.imagen?.trim()) {
+              <svg lucideImageOff [size]="18"></svg>
+            } @else {
+              <img
+                [src]="destacado.imagen"
+                alt=""
+                loading="lazy"
+                decoding="async"
+                (error)="imagenTopFallida.set(true)"
+              />
+            }
+          </span>
+          <span class="top-product__name">{{ destacado.nombre }}</span>
+        </div>
+
+        <div class="kpi-card__footer">
+          <span class="top-product__visits">
+            {{ formatNumber(destacado.visitas) }}
+            <span class="kpi-card__unit">visitas</span>
+          </span>
+        </div>
+      } @else {
+        <p class="kpi-card__hint">Sin productos registrados en este periodo</p>
+      }
+    }
+  </div>
+</div>

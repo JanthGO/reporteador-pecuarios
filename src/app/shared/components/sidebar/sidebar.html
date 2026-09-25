@@ -22,7 +22,8 @@
         <svg lucideImage [size]="18"></svg>
         <span>Banners</span>
       </a>
-      <a class="sidebar__link" href="#" (click)="close.emit(); $event.preventDefault()">
+      <a class="sidebar__link" routerLink="/productos" routerLinkActive="sidebar__link--active"
+        ariaCurrentWhenActive="page" (click)="close.emit()">
         <svg lucideSyringe [size]="18"></svg>
         <span>Productos</span>
       </a>

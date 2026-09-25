@@ -1,0 +1,37 @@
+<article class="product-row">
+  <span class="product-row__rank" [class.product-row__rank--leader]="producto().posicion === 1">
+    {{ producto().posicion }}
+  </span>
+
+  <span class="product-row__thumb" aria-hidden="true">
+    @if (imagenFallida() || !tieneImagen()) {
+      <svg lucideImageOff [size]="16"></svg>
+    } @else {
+      <img
+        [src]="producto().imagen"
+        alt=""
+        loading="lazy"
+        decoding="async"
+        (error)="imagenFallida.set(true)"
+      />
+    }
+  </span>
+
+  <span class="product-row__body">
+    <span class="product-row__name">{{ producto().nombre }}</span>
+    @if (!producto().activo) {
+      <span class="product-row__badge">Inactivo</span>
+    }
+  </span>
+
+  <span class="product-row__metric">
+    <span class="product-row__visits">{{ formatNumber(producto().visitas) }}</span>
+    <span class="product-row__metric-label">visitas</span>
+  </span>
+
+  <span
+    class="product-row__share"
+    [style.width.%]="producto().proporcion"
+    [attr.aria-hidden]="true"
+  ></span>
+</article>

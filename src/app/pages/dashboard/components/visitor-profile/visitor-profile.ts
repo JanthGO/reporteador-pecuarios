@@ -1,6 +1,11 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { LucideUser, LucideClock, LucideGlobe } from '@lucide/angular';
-import { AgeBucket, PerfilVisitante, info } from '../../../../core/interfaces/dashboard/PerfilVisitante';
+import {
+  AgeBucket,
+  PerfilVisitante,
+  info,
+  rangosEdad,
+} from '../../../../core/interfaces/dashboard/PerfilVisitante';
 import { environment } from '../../../../../environments/environment';
 
 
@@ -30,23 +35,10 @@ export class VisitorProfile {
    * Distribución combinada de edad (hombre + mujer por rango), ordenada de forma
    * descendente. El backend entrega los porcentajes separados por género, y la
    * regla de negocio los agrega para mostrar el desglose total por rango de edad.
+   * La transformación vive en `rangosEdad` porque el módulo de productos consume
+   * exactamente la misma regla.
    */
-  protected readonly rangosEdad = computed<AgeBucket[]>(() => {
-    const perfil = this.perfil();
-    if (!perfil?.visitasXgenero) return [];
-
-    const man = perfil.visitasXgenero.porcientoMan;
-    const woman = perfil.visitasXgenero.porcientoWoman;
-
-    return [
-      { label: 'Menos de 20 años', value: man.menos20 + woman.menos20 },
-      { label: '20–30 años', value: man.entre20y30 + woman.entre20y30 },
-      { label: '30–40 años', value: man.entre30y40 + woman.entre30y40 },
-      { label: '40–50 años', value: man.entre40y50 + woman.entre40y50 },
-      { label: '50–60 años', value: man.entre50y60 + woman.entre50y60 },
-      { label: 'Más de 60 años', value: man.mas60 + woman.mas60 },
-    ].sort((a, b) => b.value - a.value);
-  });
+  protected readonly rangosEdad = computed<AgeBucket[]>(() => rangosEdad(this.perfil()));
 
   protected readonly edadPrincipal = computed<AgeBucket | null>(
     () => this.rangosEdad()[0] ?? null,

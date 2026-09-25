@@ -1,3 +1,5 @@
+import { PerfilVisitante } from "./PerfilVisitante";
+
 export interface ResponseVisitasTotales {
     statusCode: number;
     data:       VisitasTotales;
@@ -25,4 +27,31 @@ export interface SectionDef {
   nombre: string;
   iconClass: string;
   iconName: string;
+}
+
+export interface ResponseSecciones {
+    statusCode: number;
+    data:       Secciones;
+}
+
+export interface Secciones {
+    contenidos:   Contenidos;
+    visitas:      VisitasTotales;
+    perfilVisita: PerfilVisitante;
+}
+
+export interface Contenidos {
+    total:   number;
+    data:    elemento[];
+    popular: elemento[];
+}
+
+export interface elemento {
+    id:      number;
+    nombre:  string;
+    imagen:  string;
+    estatus: number;
+    visitas: number;
+    url:     string;
+    orden?:     number;
 }

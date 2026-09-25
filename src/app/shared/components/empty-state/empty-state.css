@@ -1,0 +1,51 @@
+/* ── Estado vacío ── */
+
+.state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  padding: var(--space-10) var(--space-5);
+  text-align: center;
+  background: var(--color-surface);
+  border: 1px dashed var(--color-border-strong);
+  border-radius: var(--radius-md);
+}
+
+.state__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  margin-bottom: var(--space-2);
+  background: var(--color-primary-lighter);
+  border-radius: var(--radius-full);
+  color: var(--color-primary);
+}
+
+.state__title {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-wrap: balance;
+}
+
+.state__detail {
+  margin: 0;
+  max-width: 42ch;
+  color: var(--color-ink-secondary);
+  font-size: 0.8125rem;
+  text-wrap: pretty;
+}
+
+.state--danger .state__icon {
+  background: oklch(0.93 0.03 25);
+  color: var(--color-danger);
+}
+
+.state--danger .state__title {
+  color: var(--color-danger);
+}

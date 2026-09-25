@@ -1,0 +1,70 @@
+<section class="section">
+  <div class="section__header">
+    <div>
+      <h2 class="section__title">Perfil del visitante</h2>
+      <p class="section__sub">
+        Características de las personas que visitaron los productos de {{ sitio }} durante el
+        periodo seleccionado.
+      </p>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="profile-grid">
+      @for (bloque of [1, 2, 3]; track bloque) {
+        <div class="profile-card">
+          <div class="skeleton skeleton--head"></div>
+          @for (fila of [1, 2, 3, 4, 5]; track fila) {
+            <div class="skeleton skeleton--row"></div>
+          }
+        </div>
+      }
+    </div>
+  } @else if (vacio()) {
+    <app-empty-state
+      icon="users"
+      title="Sin perfil demográfico"
+      detail="No hay visitas de usuarios registrados en este periodo."
+    ></app-empty-state>
+  } @else {
+    <div class="profile-grid">
+      @for (grupo of grupos(); track grupo.clave) {
+        <div class="profile-card">
+          <div class="profile-card__head">
+            <div
+              class="profile-card__icon"
+              [class]="'profile-card__icon--' + grupo.clave"
+              aria-hidden="true"
+            >
+              <svg [lucideIcon]="grupo.icono" [size]="18"></svg>
+            </div>
+            <span class="profile-card__label">{{ grupo.label }}</span>
+          </div>
+
+          @if (grupo.items.length > 0) {
+            <ul class="rank-list">
+              @for (item of grupo.items; track item.label) {
+                <li class="rank-list__item">
+                  <span class="rank-list__label">{{ item.label }}</span>
+                  <span class="rank-list__pct">{{ formatPct(item.pct) }}</span>
+                  <span class="rank-list__track">
+                    <span
+                      class="rank-list__fill"
+                      [style.transform]="'scaleX(' + item.escala / 100 + ')'"
+                    ></span>
+                  </span>
+                </li>
+              }
+            </ul>
+          } @else {
+            <p class="profile-card__empty">Sin registros en este periodo</p>
+          }
+        </div>
+      }
+    </div>
+  }
+
+  <p class="section__footnote">
+    Datos estadísticos: muestra basada en las visitas de usuarios registrados en {{ sitio }}.
+  </p>
+</section>

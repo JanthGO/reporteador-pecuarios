@@ -1,0 +1,141 @@
+<!-- Encabezado -->
+<section class="title-section">
+  <div class="title-section__text">
+    <h1 class="title-section__heading">Productos</h1>
+    <p class="title-section__sub">
+      Analiza las visualizaciones, el perfil del visitante y el rendimiento de cada producto de
+      {{ sitioNombre }}.
+    </p>
+  </div>
+
+  <div class="title-section__actions">
+    <app-date-range (rangeChange)="onRangeChange($event)"></app-date-range>
+  </div>
+</section>
+
+@if (errorMsg(); as mensaje) {
+  <div class="error-strip">
+    <app-empty-state
+      tone="danger"
+      title="No se pudo cargar el módulo"
+      [detail]="mensaje"
+    ></app-empty-state>
+    <button class="btn-secondary" type="button" (click)="reintentar()">
+      <svg lucideRefreshCw [size]="15"></svg>
+      Reintentar
+    </button>
+  </div>
+} @else if (hayDatos() || cargando()) {
+  <!-- ── KPIs ── -->
+  <app-kpi-band [seccion]="seccion()" [loading]="cargando()"></app-kpi-band>
+
+  <!-- ── Perfil del visitante ── -->
+  <app-products-visitor-profile
+    [perfil]="perfil()"
+    [loading]="cargando()"
+  ></app-products-visitor-profile>
+
+  <!-- ── Listado de productos ── -->
+  <section class="section">
+    <div class="section__header">
+      <div>
+        <h2 class="section__title">Productos</h2>
+        <p class="section__sub">
+          @if (cargando()) {
+            Consultando el catálogo del periodo seleccionado.
+          } @else {
+            <span class="results">
+              {{ formatNumber(productos().length) }}
+              {{ productos().length === 1 ? 'producto' : 'productos' }}
+              @if (formatRango(rango()); as periodo) {
+                <span class="results__period">· {{ periodo }}</span>
+              }
+            </span>
+          }
+        </p>
+      </div>
+
+      <div class="list-controls">
+        <app-search
+          [(value)]="busqueda"
+          placeholder="Buscar producto..."
+          ariaLabel="Buscar producto por nombre"
+        ></app-search>
+
+        <div class="control">
+          <span class="control__label" id="orden-label">Ordenar por</span>
+          <div class="segmented" role="group" aria-labelledby="orden-label">
+            @for (opcion of ordenes; track opcion.key) {
+              <button
+                class="segmented__option"
+                type="button"
+                [class.segmented__option--active]="orden() === opcion.key"
+                [attr.aria-pressed]="orden() === opcion.key"
+                (click)="onOrdenChange(opcion.key)"
+              >
+                {{ opcion.label }}
+              </button>
+            }
+          </div>
+        </div>
+
+        <button
+          class="switch"
+          type="button"
+          role="switch"
+          [class.switch--on]="soloActivos()"
+          [attr.aria-checked]="soloActivos()"
+          (click)="alternarSoloActivos()"
+        >
+          <span class="switch__track" aria-hidden="true">
+            <span class="switch__knob"></span>
+          </span>
+          <span class="switch__label">Solo activos</span>
+        </button>
+      </div>
+    </div>
+
+    @if (cargando()) {
+      <div class="product-grid">
+        @for (fila of esqueletos; track fila) {
+          <div class="row-skeleton" aria-hidden="true">
+            <div class="skeleton skeleton--rank"></div>
+            <div class="skeleton skeleton--thumb"></div>
+            <div class="skeleton--body">
+              <span class="skeleton skeleton--line"></span>
+              <span class="skeleton skeleton--count"></span>
+            </div>
+          </div>
+        }
+      </div>
+    } @else if (sinCoincidencias()) {
+      <app-empty-state
+        icon="search"
+        title="No encontramos productos con ese nombre"
+        detail="Revisa la búsqueda o limpia el campo para volver a ver todo el catálogo."
+      ></app-empty-state>
+    } @else if (sinProductos()) {
+      <app-empty-state
+        icon="shopping-bag"
+        title="No se encontraron productos"
+        [detail]="
+          soloActivos()
+            ? 'No hay productos activos en este periodo. Desactiva el filtro para ver todo el catálogo.'
+            : 'Todavía no hay productos publicados en este periodo.'
+        "
+      ></app-empty-state>
+    } @else {
+      <div class="product-grid">
+        @for (producto of productos(); track producto.id) {
+          <app-product-row [producto]="producto"></app-product-row>
+        }
+      </div>
+    }
+  </section>
+} @else {
+  <app-empty-state
+    icon="calendar-range"
+    title="No hay información disponible para este periodo"
+    detail="Intenta seleccionar un rango de fechas diferente."
+  ></app-empty-state>
+}
