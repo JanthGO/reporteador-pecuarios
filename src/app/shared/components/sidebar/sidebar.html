@@ -13,9 +13,10 @@
         <svg lucideLayoutGrid [size]="18"></svg>
         <span>Resumen general</span>
       </a>
-      <a class="sidebar__link" href="#" (click)="close.emit(); $event.preventDefault()">
+      <a class="sidebar__link" routerLink="/campanias" routerLinkActive="sidebar__link--active"
+        ariaCurrentWhenActive="page" (click)="close.emit()">
         <svg lucideMail [size]="18"></svg>
-        <span>Campanas</span>
+        <span>Campañas</span>
       </a>
       <a class="sidebar__link" href="#" (click)="close.emit(); $event.preventDefault()">
         <svg lucideImage [size]="18"></svg>

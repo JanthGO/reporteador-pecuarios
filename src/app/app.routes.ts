@@ -16,6 +16,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/dashboard/dashboard.component').then((m) => m.DashboardComponent),
       },
+      {
+        path: 'campanias',
+        loadComponent: () =>
+          import('./pages/campanias/campanias').then((m) => m.Campanias),
+      }
     ],
   },
   { path: '**', redirectTo: 'dashboard', pathMatch: 'full' },

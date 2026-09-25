@@ -1,0 +1,38 @@
+<!-- Encabezado -->
+<section class="title-section">
+  <div class="title-section__text">
+    <h1 class="title-section__heading">Campaña</h1>
+    <p class="title-section__sub">Consulta las campañas publicadas durante un periodo determinado.</p>
+  </div>
+
+  <div class="title-section__actions">
+    <app-date-range (rangeChange)="onRangeChange($event)"></app-date-range>
+  </div>
+</section>
+
+<!-- Buscador -->
+<div class="list-header">
+  <app-search
+    [(value)]="busqueda"
+    placeholder="Buscar campaña..."
+    ariaLabel="Buscar campaña por nombre"
+  ></app-search>
+</div>
+
+@if (campanasVisibles().length > 0) {
+  <div class="campaign-grid">
+    @for (campania of campanasVisibles(); track campania.id) {
+      <app-campaign-card [campania]="campania"></app-campaign-card>
+    }
+  </div>
+} @else {
+  <div class="campaigns-empty">
+    <div class="campaigns-empty__icon" aria-hidden="true">
+      <svg lucideMegaphone [size]="22"></svg>
+    </div>
+    <p class="campaigns-empty__title">No se encontraron campañas</p>
+    <p class="campaigns-empty__detail">
+      Intenta modificar el periodo seleccionado o realizar otra búsqueda.
+    </p>
+  </div>
+}

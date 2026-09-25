@@ -1,0 +1,16 @@
+<div class="search">
+  <svg class="search__icon" lucideSearch [size]="15" aria-hidden="true"></svg>
+  <input
+    class="search__input"
+    type="search"
+    [placeholder]="placeholder()"
+    [attr.aria-label]="ariaLabel()"
+    [value]="value()"
+    (input)="onInput($event)"
+  />
+  @if (hayTexto()) {
+    <button class="search__clear" type="button" aria-label="Limpiar búsqueda" (click)="clear()">
+      <svg lucideX [size]="14" aria-hidden="true"></svg>
+    </button>
+  }
+</div>

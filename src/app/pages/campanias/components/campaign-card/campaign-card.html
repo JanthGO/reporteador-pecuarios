@@ -1,0 +1,30 @@
+<a
+  class="campaign-card"
+  [href]="campania().enlace"
+  target="_blank"
+  rel="noopener noreferrer"
+  [attr.aria-label]="campania().nombre + ' — se abre en una pestaña nueva'"
+>
+  <span class="campaign-card__thumb" aria-hidden="true">
+    @if (imagenFallida()) {
+      <svg lucideImageOff [size]="16"></svg>
+    } @else {
+      <img
+        [src]="campania().imagen"
+        alt=""
+        loading="lazy"
+        decoding="async"
+        (error)="imagenFallida.set(true)"
+      />
+    }
+  </span>
+
+  <span class="campaign-card__body">
+    <time class="campaign-card__date" [attr.datetime]="campania().fechaIso">{{ campania().fechaLabel }}</time>
+    <span class="campaign-card__name">{{ campania().nombre }}</span>
+  </span>
+
+  <span class="campaign-card__action" aria-hidden="true">
+    <svg lucideArrowUpRight [size]="15"></svg>
+  </span>
+</a>

@@ -1,0 +1,110 @@
+/* ── Contenido de la vista (el shell layout vive en layout.component) ── */
+
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* ── Encabezado ── */
+
+.title-section {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-6);
+  flex-wrap: wrap;
+}
+
+.title-section__heading {
+  margin: 0 0 var(--space-1);
+  color: var(--color-ink);
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.title-section__sub {
+  margin: 0;
+  color: var(--color-ink-secondary);
+  font-size: 0.875rem;
+}
+
+.title-section__actions {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-shrink: 0;
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+}
+
+/* ── Encabezado del listado ── */
+
+.list-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* ── Grid de campañas ── */
+
+.campaign-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2);
+}
+
+@media (max-width: 1080px) {
+  .campaign-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ── Estado vacío ── */
+
+.campaigns-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  padding: var(--space-10) var(--space-5);
+  text-align: center;
+  background: var(--color-surface);
+  border: 1px dashed var(--color-border-strong);
+  border-radius: var(--radius-md);
+}
+
+.campaigns-empty__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  margin-bottom: var(--space-2);
+  background: var(--color-primary-lighter);
+  border-radius: var(--radius-full);
+  color: var(--color-primary);
+}
+
+.campaigns-empty__title {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.campaigns-empty__detail {
+  margin: 0;
+  max-width: 38ch;
+  color: var(--color-ink-secondary);
+  font-size: 0.8125rem;
+}
