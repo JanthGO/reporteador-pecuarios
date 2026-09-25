@@ -3,10 +3,11 @@ import { RouterOutlet } from '@angular/router';
 import { Sidebar } from '../shared/components/sidebar/sidebar';
 import { Header } from '../shared/components/header/header';
 import { AuthService } from '../core/services/auth.service';
+import { Footer } from '../shared/components/footer/footer';
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [RouterOutlet, Sidebar, Header],
+  imports: [RouterOutlet, Sidebar, Header, Footer],
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

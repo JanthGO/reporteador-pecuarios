@@ -26,6 +26,10 @@
   padding: var(--space-8);
 }
 
+.footer {
+  padding-top: 32px;
+}
+
 /* ── Responsive: el sidebar pasa a off-canvas ── */
 
 @media (max-width: 768px) {

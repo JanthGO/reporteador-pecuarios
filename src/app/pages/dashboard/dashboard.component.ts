@@ -36,7 +36,6 @@ imports: [
     LucideEye,
     LucideCalendarRange,
     LucideCalendarDays,
-    Footer
 ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
