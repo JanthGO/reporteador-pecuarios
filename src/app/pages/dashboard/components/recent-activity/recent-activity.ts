@@ -35,7 +35,7 @@ export class RecentActivity {
   readonly empresa = this.authService.empresaNombre();
 
   /** Nombre del ícono de Lucide para la sección de la actividad. */
-  iconFor(item: ActivityItem): string {
+  iconFor(item: ActivityItem): string {    
     return SECTION_ICONS[item.seccionClass] ?? 'activity';
   }
 }

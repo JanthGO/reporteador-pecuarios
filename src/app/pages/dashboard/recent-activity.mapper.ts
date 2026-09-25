@@ -21,7 +21,7 @@ const SECCIONES: Record<string, string> = {
   noticias: 'Noticias',
   eventos: 'Eventos',
   vacante: 'Vacantes',
-  videos: 'Videos',
+  videos: 'Video',
 };
 
 /** Normaliza un texto para comparaciones tolerantes (minúsculas, sin tildes). */
@@ -49,7 +49,6 @@ function resolveSeccion(value: string | undefined): { nombre: string; clase: str
   const byKey = entries.find(([k]) => normalize(k) === key)?.[0];
   const byName = entries.find(([, nombre]) => normalize(nombre) === key)?.[0];
   const match = byKey ?? byName;
-
   return match
     ? { nombre: SECCIONES[match], clase: `activity-badge--${match}` }
     : { nombre: value?.trim() || 'General', clase: 'activity-badge--general' };
