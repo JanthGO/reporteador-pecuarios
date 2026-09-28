@@ -3,8 +3,7 @@
   <div class="title-section__text">
     <h1 class="title-section__heading">Productos</h1>
     <p class="title-section__sub">
-      Analiza las visualizaciones, el perfil del visitante y el rendimiento de cada producto de
-      {{ sitioNombre }}.
+      Analiza las visualizaciones, el perfil del visitante y el rendimiento de cada producto de {{ sitioNombre }}.
     </p>
   </div>
 
@@ -30,16 +29,16 @@
   <app-kpi-band [seccion]="seccion()" [loading]="cargando()"></app-kpi-band>
 
   <!-- ── Perfil del visitante ── -->
-  <app-products-visitor-profile
+  <app-visitor-profile
     [perfil]="perfil()"
     [loading]="cargando()"
-  ></app-products-visitor-profile>
+  ></app-visitor-profile>
 
   <!-- ── Listado de productos ── -->
   <section class="section">
     <div class="section__header">
       <div>
-        <h2 class="section__title">Productos</h2>
+        <h2 class="title-section__heading">Lista de productos</h2>
         <p class="section__sub">
           @if (cargando()) {
             Consultando el catálogo del periodo seleccionado.
@@ -96,14 +95,14 @@
     </div>
 
     @if (cargando()) {
-      <div class="product-grid">
+      <div class="product-grid" aria-busy="true">
         @for (fila of esqueletos; track fila) {
           <div class="row-skeleton" aria-hidden="true">
-            <div class="skeleton skeleton--rank"></div>
-            <div class="skeleton skeleton--thumb"></div>
+            <app-skeleton width="1.25rem" height="12px"></app-skeleton>
+            <app-skeleton width="56px" height="42px" radius="var(--radius-sm)"></app-skeleton>
             <div class="skeleton--body">
-              <span class="skeleton skeleton--line"></span>
-              <span class="skeleton skeleton--count"></span>
+              <span class="skeleton-line"><app-skeleton width="9rem" height="12px"></app-skeleton></span>
+              <app-skeleton width="3.25rem" height="18px"></app-skeleton>
             </div>
           </div>
         }
@@ -127,7 +126,7 @@
     } @else {
       <div class="product-grid">
         @for (producto of productos(); track producto.id) {
-          <app-product-row [producto]="producto"></app-product-row>
+            <app-product-card [producto]="producto"></app-product-card>
         }
       </div>
     }

@@ -46,6 +46,7 @@ export interface ProductoItem {
   posicion: number;
   /** Visitas del producto sobre el máximo visible, en porcentaje (0–100). */
   proporcion: number;
+  url: string;
 }
 
 /** Una categoría del perfil con su cuota real y su escala dentro del grupo. */
@@ -180,6 +181,7 @@ export function selectProductos(
     activo: item?.estatus === 1,
     posicion: index + 1,
     proporcion: maxVisitas > 0 ? ((item?.visitas ?? 0) / maxVisitas) * 100 : 0,
+    url: item?.url ?? '',
   }));
 }
 

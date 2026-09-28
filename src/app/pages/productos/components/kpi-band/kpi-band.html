@@ -2,9 +2,9 @@
   <!-- Total de visualizaciones y su evolución -->
   <div class="kpi-card kpi-card--featured">
     @if (loading()) {
-      <div class="skeleton skeleton--label"></div>
-      <div class="skeleton skeleton--figure"></div>
-      <div class="skeleton skeleton--chart"></div>
+      <app-skeleton width="10rem" height="13px" class="kpi-skeleton-label"></app-skeleton>
+      <app-skeleton width="9rem" height="34px" class="kpi-skeleton-figure"></app-skeleton>
+      <app-skeleton width="100%" height="88px"></app-skeleton>
     } @else {
       <div class="kpi-card__header">
         <span class="kpi-card__label">Visualizaciones a productos</span>
@@ -46,9 +46,9 @@
   <!-- Productos publicados -->
   <div class="kpi-card">
     @if (loading()) {
-      <div class="skeleton skeleton--label"></div>
-      <div class="skeleton skeleton--figure"></div>
-      <div class="skeleton skeleton--line"></div>
+      <app-skeleton width="10rem" height="13px" class="kpi-skeleton-label"></app-skeleton>
+      <app-skeleton width="9rem" height="34px" class="kpi-skeleton-figure"></app-skeleton>
+      <app-skeleton width="11rem" height="12px"></app-skeleton>
     } @else {
       <div class="kpi-card__header">
         <span class="kpi-card__label">Productos publicados</span>
@@ -60,22 +60,15 @@
           {{ totalProductos() === 1 ? 'producto' : 'productos' }}
         </span>
       </p>
-
-      <div class="kpi-card__footer">
-        <span class="kpi-card__stat">
-          <svg lucideActivity [size]="14"></svg>
-          {{ formatNumber(conVisitas()) }} con visitas en el periodo
-        </span>
-      </div>
     }
   </div>
 
   <!-- Producto más visitado -->
   <div class="kpi-card">
     @if (loading()) {
-      <div class="skeleton skeleton--label"></div>
-      <div class="skeleton skeleton--block"></div>
-      <div class="skeleton skeleton--line"></div>
+      <app-skeleton width="10rem" height="13px" class="kpi-skeleton-label"></app-skeleton>
+      <app-skeleton width="100%" height="42px" class="kpi-skeleton-block"></app-skeleton>
+      <app-skeleton width="11rem" height="12px"></app-skeleton>
     } @else {
       <div class="kpi-card__header">
         <span class="kpi-card__label">Producto más visitado</span>
@@ -83,11 +76,11 @@
 
       @if (topProducto(); as destacado) {
         <div class="top-product">
-          <span class="top-product__thumb" aria-hidden="true">
+          <a [href]="destacado.url" target="_blank" class="top-product__thumb" aria-hidden="true">
             @if (imagenTopFallida() || !destacado.imagen?.trim()) {
               <svg lucideImageOff [size]="18"></svg>
             } @else {
-              <img
+              <img 
                 [src]="destacado.imagen"
                 alt=""
                 loading="lazy"
@@ -95,7 +88,7 @@
                 (error)="imagenTopFallida.set(true)"
               />
             }
-          </span>
+          </a>
           <span class="top-product__name">{{ destacado.nombre }}</span>
         </div>
 

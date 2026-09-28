@@ -19,8 +19,7 @@ import {
 import { Search } from '../../shared/components/search/search';
 import { EmptyState } from '../../shared/components/empty-state/empty-state';
 import { KpiBand } from './components/kpi-band/kpi-band';
-import { ProductRow } from './components/product-row/product-row';
-import { ProductsVisitorProfile } from './components/products-visitor-profile/products-visitor-profile';
+import { ProductCard } from './components/product-card/product-card';
 import {
   ORDENES,
   OrdenProductos,
@@ -29,6 +28,8 @@ import {
   hayDatosPeriodo,
   selectProductos,
 } from './productos.mapper';
+import { VisitorProfile } from '../../shared/components/visitor-profile/visitor-profile';
+import { Skeleton } from '../../shared/components/skeleton/skeleton';
 
 /** Esqueletos del listado mientras llegan los productos. */
 const ESQUELETONS_FILA = [1, 2, 3, 4, 5, 6];
@@ -56,9 +57,10 @@ const ESQUELETONS_FILA = [1, 2, 3, 4, 5, 6];
     Search,
     EmptyState,
     KpiBand,
-    ProductRow,
-    ProductsVisitorProfile,
+    ProductCard,
     LucideRefreshCw,
+    VisitorProfile,
+    Skeleton,
   ],
   templateUrl: './productos.html',
   styleUrl: './productos.css',

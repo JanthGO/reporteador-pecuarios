@@ -12,12 +12,12 @@ import { isPlatformBrowser } from '@angular/common';
 import { HighchartsChartComponent } from 'highcharts-angular';
 import type Highcharts from 'highcharts';
 import {
-  LucideActivity,
   LucideCalendarDays,
   LucideImageOff,
   LucideTrendingUp,
 } from '@lucide/angular';
 import { Secciones, Visitas } from '../../../../core/interfaces/dashboard/visitas';
+import { Skeleton } from '../../../../shared/components/skeleton/skeleton';
 import {
   cuentaConVisitas,
   formatDia,
@@ -43,10 +43,10 @@ import {
   standalone: true,
   imports: [
     HighchartsChartComponent,
-    LucideActivity,
     LucideCalendarDays,
     LucideImageOff,
     LucideTrendingUp,
+    Skeleton,
   ],
   templateUrl: './kpi-band.html',
   styleUrl: './kpi-band.css',
