@@ -9,17 +9,26 @@
   (keydown.space)="cardClick.emit(); $event.preventDefault()"
 >
   <div class="content-card__top flex items-center">
-    <div class="content-card__icon" [class]="iconClass()">
-      <svg [lucideIcon]="iconName()" [size]="16"></svg>
-    </div>
-    <div>
-      <span class="content-card__name">{{ titulo() }}</span>
-      <div class="content-card__count" [class.content-card__count--zero]="visitas() === 0">
-        {{ visitas() === 0 ? '0' : (visitas() | number) }}
+    @if (loading()) {
+      <app-skeleton width="34px" height="34px" radius="8px"></app-skeleton>
+      <div class="content-card__lines">
+        <app-skeleton width="5rem" height="12px"></app-skeleton>
+        <app-skeleton width="3rem" height="18px"></app-skeleton>
       </div>
-
-    </div>
-    <div class="content-card__sparkline">
+      <div class="content-card__sparkline content-card__sparkline--skeleton">
+        <app-skeleton width="100%" height="48px"></app-skeleton>
+      </div>
+    } @else {
+      <div class="content-card__icon" [class]="iconClass()">
+        <svg [lucideIcon]="iconName()" [size]="16"></svg>
+      </div>
+      <div>
+        <span class="content-card__name">{{ titulo() }}</span>
+        <div class="content-card__count" [class.content-card__count--zero]="visitas() === 0">
+          {{ visitas() === 0 ? '0' : (visitas() | number) }}
+        </div>
+      </div>
+      <div class="content-card__sparkline">
         @if (sparklineData().length > 0) {
           <highcharts-chart
             [options]="sparklineOptions()"
@@ -27,6 +36,6 @@
           ></highcharts-chart>
         }
       </div>
-    
+    }
   </div>
 </div>

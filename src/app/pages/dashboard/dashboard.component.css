@@ -82,6 +82,50 @@
   outline-offset: 2px;
 }
 
+/* ── Error ── */
+
+.error-strip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  color: var(--color-ink);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  transition:
+    background var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out);
+}
+
+.btn-secondary:hover {
+  background: var(--color-bg);
+  border-color: var(--color-sitio);
+}
+
+/* ── Skeleton del gráfico ── */
+
+.chart-skeleton {
+  display: flex;
+  align-items: center;
+  min-height: 350px;
+}
+
+.chart-skeleton app-skeleton {
+  width: 100%;
+}
+
 /* ── KPI strip ── */
 
 .kpi-strip {

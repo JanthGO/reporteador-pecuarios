@@ -4,9 +4,10 @@ import { LucideDynamicIcon } from '@lucide/angular';
 import { HighchartsChartComponent } from 'highcharts-angular';
 import type Highcharts from 'highcharts';
 import { Visitas } from '../../../../core/interfaces/dashboard/visitas';
+import { Skeleton } from '../../../../shared/components/skeleton/skeleton';
 
 @Component({
-  imports: [DecimalPipe, LucideDynamicIcon, HighchartsChartComponent],
+  imports: [DecimalPipe, LucideDynamicIcon, HighchartsChartComponent, Skeleton],
   selector: 'app-performance-card',
   styleUrl: './performance-card.css',
   templateUrl: './performance-card.html',
@@ -17,6 +18,8 @@ export class PerformanceCard {
   iconClass = input<string>('');
   iconName = input<string>('');
   selected = input<boolean>(false);
+  /** Muestra esqueletos mientras la sección aún no termina de cargar. */
+  loading = input(false);
   /** Serie temporal de visitas para el sparkline. */
   sparklineData = input<Visitas[]>([]);
 

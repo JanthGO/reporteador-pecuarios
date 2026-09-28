@@ -7,7 +7,19 @@
   </div>
   
 
-  @if (actividad().length > 0) {
+  @if (loading()) {
+    <div class="activity-list grid grid-cols-2 gap-4 md:grid-cols-3" aria-busy="true">
+      @for (bloque of esqueletos; track bloque) {
+        <div class="activity-card activity-card--skeleton" aria-hidden="true">
+          <app-skeleton width="38px" height="38px" radius="8px"></app-skeleton>
+          <div class="activity-card__body">
+            <app-skeleton width="70%" height="15px"></app-skeleton>
+            <app-skeleton width="55%" height="12px"></app-skeleton>
+          </div>
+        </div>
+      }
+    </div>
+  } @else if (actividad().length > 0) {
     <div class="activity-list grid grid-cols-2 gap-4 md:grid-cols-3">
       @for (item of actividad(); track $index) {
         <div class="activity-card">

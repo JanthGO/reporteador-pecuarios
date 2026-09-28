@@ -99,6 +99,18 @@
   margin-left: auto;
 }
 
+.content-card__lines {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.content-card .content-card__sparkline--skeleton {
+  display: flex;
+  align-items: center;
+}
+
 .content-card__count {
   color: var(--color-ink);
   font-size: 1.25rem;

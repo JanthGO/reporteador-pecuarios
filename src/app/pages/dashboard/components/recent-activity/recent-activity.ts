@@ -8,6 +8,7 @@ import {
 } from '@lucide/angular';
 import { ActivityItem } from '../../../../core/interfaces/dashboard/ActividadReciente';
 import { AuthService } from '../../../../core/services/auth.service';
+import { Skeleton } from '../../../../shared/components/skeleton/skeleton';
 
 /** Ícono de Lucide por clase de badge de sección, espejo de las secciones del dashboard. */
 const SECTION_ICONS: Record<string, string> = {
@@ -21,10 +22,13 @@ const SECTION_ICONS: Record<string, string> = {
   'activity-badge--general': 'activity',
 };
 
+/** Esqueletos de tarjetas de actividad mientras la sección carga. */
+const ESQUELETOS_ACTIVIDAD = [1, 2, 3, 4, 5, 6];
+
 @Component({
   selector: 'app-recent-activity',
   standalone: true,
-  imports: [LucideDynamicIcon, LucideInbox, LucideMonitor, LucideSmartphone],
+  imports: [LucideDynamicIcon, LucideInbox, LucideMonitor, LucideSmartphone, Skeleton],
   templateUrl: './recent-activity.html',
   styleUrl: './recent-activity.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -32,7 +36,9 @@ const SECTION_ICONS: Record<string, string> = {
 export class RecentActivity {
   private authService = inject(AuthService);
   readonly actividad = input<ActivityItem[]>([]);
+  readonly loading = input(false);
   readonly empresa = this.authService.empresaNombre();
+  protected readonly esqueletos = ESQUELETOS_ACTIVIDAD;
 
   /** Nombre del ícono de Lucide para la sección de la actividad. */
   iconFor(item: ActivityItem): string {    

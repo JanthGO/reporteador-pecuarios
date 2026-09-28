@@ -8,8 +8,10 @@ import { VisitasService } from '../../core/services/visitas.service';
 import { Visitas, ResponseVisitasTotales, SectionDef } from '../../core/interfaces/dashboard/visitas';
 import { HighchartsChartComponent } from 'highcharts-angular';
 import { PerformanceCard } from './components/performance-card/performance-card';
-import { VisitorProfile } from './components/visitor-profile/visitor-profile';
+import { VisitorProfile } from '../../shared/components/visitor-profile/visitor-profile';
 import { RecentActivity } from './components/recent-activity/recent-activity';
+import { Skeleton } from '../../shared/components/skeleton/skeleton';
+import { EmptyState } from '../../shared/components/empty-state/empty-state';
 import type Highcharts from 'highcharts';
 import {
   LucideDownload,
@@ -20,7 +22,9 @@ import {
 import { ResponsePerfilVisitante, PerfilVisitante } from '../../core/interfaces/dashboard/PerfilVisitante';
 import { ActivityItem, UltimasVisitas } from '../../core/interfaces/dashboard/ActividadReciente';
 import { mapUltimasVisitasToActivity } from './recent-activity.mapper';
-import { Footer } from '../../shared/components/footer/footer';
+
+/** Esqueletos de las tarjetas KPI mientras carga el total. */
+const KPI_ESQUELETOS = [1, 2, 3];
 
 @Component({
   selector: 'app-dashboard',
@@ -36,6 +40,8 @@ imports: [
     LucideEye,
     LucideCalendarRange,
     LucideCalendarDays,
+    Skeleton,
+    EmptyState,
 ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
@@ -48,6 +54,7 @@ export class DashboardComponent implements OnInit {
   protected readonly empresaNombre = this.authService.empresaNombre ?? '';
   protected readonly usuario = this.authService.currentUser;
   protected readonly sitio = environment.nombre_dominio;
+  protected readonly kpiEsqueletos = KPI_ESQUELETOS;
 
   protected readonly totalVisitas = signal(0);
   protected readonly promMensual = signal(0);
@@ -73,6 +80,9 @@ export class DashboardComponent implements OnInit {
 
   /** Indica si se está cargando el perfil del visitante del rango actual. */
   protected readonly perfilLoading = signal(false);
+
+  /** Indica si se está cargando la actividad reciente del rango actual. */
+  protected readonly activityLoading = signal(false);
 
   /** Clave sólida de la caché del perfil: `fecha_inicio|fecha_fin`. */
   private readonly currentRangeKey = computed(
@@ -177,6 +187,11 @@ export class DashboardComponent implements OnInit {
   onRangeChange(range: DateRange): void {
     this.currentRange.set(range);
     this.loadAllSections(range);
+  }
+
+  /** Reintenta la carga completa del rango seleccionado tras un error. */
+  protected reintentar(): void {
+    this.loadAllSections(this.currentRange());
   }
 
   /**
@@ -550,6 +565,8 @@ export class DashboardComponent implements OnInit {
 
     if (this.recentActivityData().has(this.currentRangeKey())) return;
 
+    this.activityLoading.set(true);
+
     this.visitasService
       .ultimasVisitas(environment.division, empresa, range.fecha_fin)
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -560,6 +577,7 @@ export class DashboardComponent implements OnInit {
             next.set(this.currentRangeKey(), Array.isArray(res.data) ? res.data : []);
             return next;
           });
+          this.activityLoading.set(false);
         },
         error: () => {
           this.recentActivityData.update((map) => {
@@ -567,6 +585,7 @@ export class DashboardComponent implements OnInit {
             next.set(this.currentRangeKey(), []);
             return next;
           });
+          this.activityLoading.set(false);
         },
       });
   }
