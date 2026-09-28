@@ -10,6 +10,11 @@ import { selectCampanias, toCampania } from './campanias.mapper';
 import { CampaniasService } from '../../core/services/campanias.service';
 import { environment } from '../../../environments/environment';
 import { Search } from '../../shared/components/search/search';
+import { EmptyState } from '../../shared/components/empty-state/empty-state';
+import { Skeleton } from '../../shared/components/skeleton/skeleton';
+
+/** Esqueletos de tarjetas del grid mientras carga el periodo. */
+const ESQUELETOS_CAMPANIA = [1, 2, 3, 4];
 
 /**
  * Vista de campañas.
@@ -24,7 +29,7 @@ import { Search } from '../../shared/components/search/search';
 @Component({
   selector: 'app-campanias',
   standalone: true,
-  imports: [DateRangeComponent, CampaignCard, LucideMegaphone, Search],
+  imports: [DateRangeComponent, CampaignCard, LucideMegaphone, Search, EmptyState, Skeleton],
   templateUrl: './campanias.html',
   styleUrl: './campanias.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -40,6 +45,14 @@ export class Campanias {
 
   /** Texto del buscador por nombre de campaña. */
   protected readonly busqueda = signal('');
+
+  /** `true` mientras el endpoint del periodo está respondiendo. */
+  protected readonly cargando = signal(false);
+
+  /** Mensaje de error de la última carga, o `null` si todo fue bien. */
+  protected readonly errorMsg = signal<string | null>(null);
+
+  protected readonly esqueletos = ESQUELETOS_CAMPANIA;
 
   private readonly campanas = signal<Campania[]>([]);
 
@@ -67,9 +80,12 @@ export class Campanias {
    *
    * @param rango - Periodo a consultar.
    */
-  private cargar(rango: DateRange): void {
+  protected cargar(rango: DateRange): void {
     const empresa = this.authService.currentUser()?.empresa;
     if (!empresa) return;
+
+    this.cargando.set(true);
+    this.errorMsg.set(null);
 
     this.campanService
       .mailchimp(this.division, empresa, rango.fecha_inicio, rango.fecha_fin)
@@ -77,9 +93,12 @@ export class Campanias {
       .subscribe({
         next: (res) => {
           this.campanas.set(Array.isArray(res?.data) ? res.data.map(toCampania) : []);
+          this.cargando.set(false);
         },
         error: () => {
           this.campanas.set([]);
+          this.errorMsg.set('No pudimos cargar las campañas del periodo. Verifica tu conexión e intenta de nuevo.');
+          this.cargando.set(false);
         },
       });
   }

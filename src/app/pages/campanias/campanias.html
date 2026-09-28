@@ -1,7 +1,7 @@
 <!-- Encabezado -->
 <section class="title-section">
   <div class="title-section__text">
-    <h1 class="title-section__heading">Campaña</h1>
+    <h1 class="title-section__heading">Campañas de mailing</h1>
     <p class="title-section__sub">Consulta las campañas publicadas durante un periodo determinado.</p>
   </div>
 
@@ -19,7 +19,29 @@
   ></app-search>
 </div>
 
-@if (campanasVisibles().length > 0) {
+@if (errorMsg(); as error) {
+  <div class="campaigns-state">
+    <app-empty-state
+      icon="alert-triangle"
+      tone="danger"
+      title="No pudimos cargar las campañas"
+      [detail]="error"
+    ></app-empty-state>
+    <button class="btn-secondary" type="button" (click)="cargar(rango())">Reintentar</button>
+  </div>
+} @else if (cargando()) {
+  <div class="campaign-grid" aria-busy="true">
+    @for (esqueleto of esqueletos; track esqueleto) {
+      <div class="campaign-card campaign-card--skeleton" aria-hidden="true">
+        <app-skeleton width="100%" height="9rem"></app-skeleton>
+        <div class="campaign-card__body">
+          <app-skeleton width="70%" height="15px"></app-skeleton>
+          <app-skeleton width="45%" height="12px"></app-skeleton>
+        </div>
+      </div>
+    }
+  </div>
+} @else if (campanasVisibles().length > 0) {
   <div class="campaign-grid">
     @for (campania of campanasVisibles(); track campania.id) {
       <app-campaign-card [campania]="campania"></app-campaign-card>
