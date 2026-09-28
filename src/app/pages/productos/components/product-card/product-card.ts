@@ -19,14 +19,14 @@ import { ProductoItem, formatNumber } from '../../productos.mapper';
  * de un recordatorio, no de un escaparate.
  */
 @Component({
-  selector: 'app-product-row',
+  selector: 'app-product-card',
   standalone: true,
   imports: [LucideImageOff],
-  templateUrl: './product-row.html',
-  styleUrl: './product-row.css',
+  templateUrl: './product-card.html',
+  styleUrl: './product-card.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProductRow {
+export class ProductCard {
   readonly producto = input.required<ProductoItem>();
 
   /** Sustituye la foto por un marcador cuando el recurso no carga. */

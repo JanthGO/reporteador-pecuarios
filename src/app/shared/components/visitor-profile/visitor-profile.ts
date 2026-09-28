@@ -5,21 +5,27 @@ import {
   PerfilVisitante,
   info,
   rangosEdad,
-} from '../../../../core/interfaces/dashboard/PerfilVisitante';
-import { environment } from '../../../../../environments/environment';
+} from '../../../core/interfaces/dashboard/PerfilVisitante';
+import { environment } from '../../../../environments/environment';
+import { Skeleton } from '../skeleton/skeleton';
 
+/** Esqueletos por tarjeta del grid (3 tarjetas). */
+const ESQUELETOS_PERFIL = [1, 2, 3];
 
 @Component({
   selector: 'app-visitor-profile',
   standalone: true,
-  imports: [LucideUser, LucideClock, LucideGlobe],
+  imports: [LucideUser, LucideClock, LucideGlobe, Skeleton],
   templateUrl: './visitor-profile.html',
   styleUrl: './visitor-profile.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VisitorProfile {
   readonly perfil = input<PerfilVisitante | null>(null);
+  readonly loading = input(false);
   readonly sitio = environment.nombre_dominio;
+  /** Top de ocupaciones (hasta 7). Se ordena descendentemente por el backend. */
+  protected readonly esqueletos = ESQUELETOS_PERFIL;
   /** Top de ocupaciones (hasta 7). Se ordena descendentemente por el backend. */
   protected readonly ocupaciones = computed<info[]>(
     () => (this.perfil()?.ocupaciones ?? []).slice(0, 7),

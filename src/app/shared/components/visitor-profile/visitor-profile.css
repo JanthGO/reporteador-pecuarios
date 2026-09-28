@@ -124,6 +124,14 @@
   margin-bottom: 0;
 }
 
+.profile-bar--skeleton {
+  margin: 0 0 var(--space-5);
+}
+
+.profile-bar--skeleton app-skeleton {
+  display: block;
+}
+
 .profile-bar--sm .profile-bar__track {
   height: 4px;
 }
