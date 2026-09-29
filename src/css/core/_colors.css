@@ -1,0 +1,61 @@
+:root{
+    --color-primary: var(--color-sitio);
+    --color-primary-light: var(--color-sitio-light);
+    --color-primary-lighter: oklch(0.92 0.04 185);
+
+    /* Fondos */
+    --fondo-gris: #eeeeee;
+    --color-bg: oklch(0.975 0.003 256);
+    --color-surface: oklch(1.000 0.000 0);
+    --color-surface-alt: oklch(0.96 0.003 256);
+
+    /* Skeleton */
+    --color-skeleton-base: oklch(0.94 0.005 256);
+    --color-skeleton-highlight: oklch(0.97 0.004 256);
+
+    /* Ink */
+    --color-ink: oklch(0.18 0.01 256);
+    --color-ink-secondary: oklch(0.45 0.01 256);
+    --color-ink-muted: oklch(0.62 0.008 256);
+    --color-ink-subtle: oklch(0.72 0.008 256);
+
+    /* Borders */
+    --color-border: oklch(0.92 0.005 256);
+    --color-border-strong: oklch(0.85 0.01 256);
+    --color-border-subtle: oklch(0.95 0.005 256);
+
+    /* Status */
+    --color-danger: oklch(0.58 0.22 25);
+
+    /* Secciones */
+    --color-bg-productos: #E6F5F2;
+    --color-c-productos: #16766C;
+  
+    /* Artículos — azul */
+    --color-bg-articulos: #EAF2FF;
+    --color-c-articulos: #3567A8;
+  
+    /* Micrositio — verde */
+    --color-bg-micrositio: #ECF7ED;
+    --color-c-micrositio: #3E7A46;
+  
+    /* Noticias — ámbar */
+    --color-bg-noticias: #FFF3DF;
+    --color-c-noticias: #95621A;
+  
+    /* Eventos — violeta */
+    --color-bg-eventos: #F2ECFC;
+    --color-c-eventos: #7552A3;
+  
+    /* Vacantes — naranja */
+    --color-bg-vacantes: #FFF0E8;
+    --color-c-vacantes: #A6532C;
+  
+    /* Videos — rojo */
+    --color-bg-videos: #FDECEC;
+    --color-c-videos: #A44747;
+  
+    /* General — gris azulado */
+    --color-bg-general: #F0F2F5;
+    --color-c-general: #596273;
+}

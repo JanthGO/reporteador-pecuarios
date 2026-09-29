@@ -11,9 +11,9 @@
   overflow: hidden;
   background: linear-gradient(
     90deg,
-    oklch(0.94 0.005 256) 25%,
-    oklch(0.97 0.004 256) 50%,
-    oklch(0.94 0.005 256) 75%
+    var(--color-skeleton-base) 25%,
+    var(--color-skeleton-highlight) 50%,
+    var(--color-skeleton-base) 75%
   );
   background-size: 300% 100%;
   animation: skeleton-sweep 1.4s ease-in-out infinite;
