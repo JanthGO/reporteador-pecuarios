@@ -155,11 +155,6 @@ app-skeleton.kpi-skeleton-figure {
   margin-bottom: var(--space-4);
 }
 
-app-skeleton.kpi-skeleton-figure,
-app-skeleton.kpi-skeleton-block {
-  display: block;
-}
-
 app-skeleton.kpi-skeleton-block {
   margin-bottom: var(--space-4);
 }
