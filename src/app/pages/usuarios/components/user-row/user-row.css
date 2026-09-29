@@ -1,0 +1,123 @@
+/* ── Fila del directorio ──
+   La rejilla toma su plantilla de la variable `--user-cols` que publica la página,
+   de modo que cabecera y filas comparten el mismo reparto de anchos sin depender
+   de dos CSS sincronizados a mano. */
+
+.user-row {
+  display: grid;
+  grid-template-columns: var(--user-cols, minmax(0, 2.2fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.1fr) minmax(0, 0.8fr));
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+  transition: background var(--duration-fast) var(--ease-out);
+}
+
+.user-row:hover {
+  background: var(--color-bg);
+}
+
+/* La última fila cierra el borde de la tarjeta; el selector va en la fila porque la
+   cabecera no puede alcanzar el contenido de este componente. */
+:host(:last-child) .user-row {
+  border-bottom: none;
+}
+
+/* ── Persona ── */
+
+.user-row__persona {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.user-row__avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  background: var(--color-primary-lighter);
+  border-radius: var(--radius-full);
+  color: var(--color-sitio);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.user-row__name {
+  min-width: 0;
+  color: var(--color-ink);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.35;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── Celdas ── */
+
+.user-row__celda {
+  min-width: 0;
+  color: var(--color-ink-secondary);
+  font-size: 0.8125rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.user-row__celda--vacia {
+  color: var(--color-ink-muted);
+  font-style: italic;
+}
+
+.user-row__fecha {
+  color: var(--color-ink-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Móvil: una tarjeta apilada ──
+   Sin scroll horizontal —el fallo típico de una tabla en un teléfono—: la
+   persona ocupa el ancho completo y el resto de datos se apila en dos columnas
+   con su etiqueta delante, que es como se lee una ficha. */
+
+@media (max-width: 900px) {
+  .user-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+    gap: var(--space-2) var(--space-4);
+    padding: var(--space-4);
+  }
+
+  .user-row__persona {
+    grid-column: 1 / -1;
+    padding-bottom: var(--space-1);
+  }
+
+  .user-row__celda {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-2);
+    white-space: normal;
+  }
+
+  .user-row__celda::before {
+    content: attr(data-label);
+    flex-shrink: 0;
+    color: var(--color-ink-muted);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+  }
+}
+
+@media (max-width: 480px) {
+  .user-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

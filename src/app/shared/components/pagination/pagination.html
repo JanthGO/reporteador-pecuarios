@@ -1,0 +1,55 @@
+<nav class="pagination" [attr.aria-label]="'Paginación de ' + unidad()">
+  <p class="pagination__coverage">{{ cobertura() }}</p>
+
+  <div class="pagination__controls">
+    <app-select-field
+      class="pagination__size"
+      label="Filas por página"
+      variant="inline"
+      [options]="opcionesTamano()"
+      [value]="pageSize().toString()"
+      (valueChange)="onPageSize($event)"
+    ></app-select-field>
+
+    @if (totalPaginas() > 1) {
+      <div class="pagination__pages">
+        <button
+          class="pagination__step"
+          type="button"
+          aria-label="Página anterior"
+          [disabled]="!hayAnterior()"
+          (click)="anterior()"
+        >
+          <svg lucideChevronLeft [size]="15"></svg>
+        </button>
+
+        @for (boton of paginas(); track $index) {
+          @if (boton === '…') {
+            <span class="pagination__gap" aria-hidden="true">&hellip;</span>
+          } @else {
+            <button
+              class="pagination__page"
+              type="button"
+              [class.pagination__page--active]="boton === pagina()"
+              [attr.aria-current]="boton === pagina() ? 'page' : null"
+              [attr.aria-label]="'Ir a la página ' + boton"
+              (click)="irA(boton)"
+            >
+              {{ boton }}
+            </button>
+          }
+        }
+
+        <button
+          class="pagination__step"
+          type="button"
+          aria-label="Página siguiente"
+          [disabled]="!haySiguiente()"
+          (click)="siguiente()"
+        >
+          <svg lucideChevronRight [size]="15"></svg>
+        </button>
+      </div>
+    }
+  </div>
+</nav>

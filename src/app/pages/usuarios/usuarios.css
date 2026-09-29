@@ -1,0 +1,302 @@
+/* ── Contenido de la vista (el shell layout vive en layout.component) ── */
+
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+/* ── Encabezado ── */
+
+.title-section {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-6);
+  flex-wrap: wrap;
+}
+
+.title-section__heading {
+  margin: 0 0 var(--space-1);
+  color: var(--color-ink);
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.title-section__sub {
+  margin: 0;
+  color: var(--color-ink-secondary);
+  font-size: 0.875rem;
+  text-wrap: pretty;
+}
+
+.title-section__actions {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-shrink: 0;
+}
+
+/* ── Secciones ── */
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.section__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.section__title {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.section__sub {
+  margin: var(--space-1) 0 0;
+  color: var(--color-ink-secondary);
+  font-size: 0.875rem;
+}
+
+.results {
+  font-variant-numeric: tabular-nums;
+}
+
+.results__period {
+  color: var(--color-ink-muted);
+}
+
+/* ── Controles del directorio ── */
+
+.list-controls {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+/* El orden por columnas solo existe en la cabecera, que en pantallas estrechas
+   se apila con las filas; el desplegable compacto es su equivalente ahí. El corte
+   es el mismo que usan las filas para volverse ficha, para que la cabecera no
+   sobreviva a la tabla que ordenaba. */
+.list-controls__orden-movil {
+  display: none;
+}
+
+/* ── Directorio ──
+   `--user-cols` es la plantilla de columnas compartida: la cabecera, los esqueletos
+   y las filas la toman de aquí, de modo que ninguna de las tres puede desalinearse
+   por un cambio en el reparto de anchos. */
+
+.usuarios-grid {
+  --user-cols: minmax(0, 2.2fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.1fr) minmax(0, 0.8fr);
+
+  overflow: hidden;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.usuarios-head {
+  display: grid;
+  grid-template-columns: var(--user-cols);
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.usuarios-head__cell {
+  min-width: 0;
+}
+
+/* El rótulo de columna es un botón: necesita aire vertical para ser un objetivo
+   cómodo, pero sin relleno a la izquierda, que separaría su texto del de la
+   primera celda de la fila. */
+.sort {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  max-width: 100%;
+  min-height: 2rem;
+  padding: var(--space-2) var(--space-2) var(--space-2) 0;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--color-ink-secondary);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-align: left;
+  transition:
+    background var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+}
+
+.sort > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sort svg {
+  flex-shrink: 0;
+  opacity: 0.55;
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.sort:hover {
+  background: var(--color-bg);
+  color: var(--color-ink);
+}
+
+.sort:hover svg {
+  opacity: 1;
+}
+
+.sort:focus-visible {
+  outline: 2px solid var(--color-sitio);
+  outline-offset: 2px;
+}
+
+.sort--active {
+  color: var(--color-ink);
+}
+
+.sort--active svg {
+  color: var(--color-sitio);
+  opacity: 1;
+}
+
+/* ── Esqueleto del listado ──
+   Replica la rejilla de las filas reales —avatar, nombre y cuatro celdas— para que
+   la carga no dé un salto de layout al llegar los datos. */
+
+.row-skeleton {
+  display: grid;
+  grid-template-columns: var(--user-cols);
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.row-skeleton:last-child {
+  border-bottom: none;
+}
+
+.row-skeleton__persona {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.row-skeleton app-skeleton {
+  display: block;
+}
+
+/* ── Error ── */
+
+.error-strip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  color: var(--color-ink);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  transition:
+    background var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out);
+}
+
+.btn-secondary:hover {
+  background: var(--color-bg);
+  border-color: var(--color-sitio);
+}
+
+.btn-secondary:focus-visible {
+  outline: 2px solid var(--color-sitio);
+  outline-offset: 2px;
+}
+
+/* ── Responsive ── */
+
+@media (max-width: 768px) {
+  .title-section__actions {
+    width: 100%;
+  }
+}
+
+@media (max-width: 900px) {
+  .list-controls {
+    align-items: stretch;
+  }
+
+  .list-controls app-select-field {
+    flex: 1 1 8rem;
+  }
+
+  /* La cabecera de columnas se retira con la tabla: a partir de aquí cada fila
+     es una ficha apilada y sus datos llevan etiqueta delante. */
+  .usuarios-head {
+    display: none;
+  }
+
+  .list-controls__orden-movil {
+    display: flex;
+  }
+
+  /* El esqueleto sigue la misma ficha que la fila real. */
+  .row-skeleton {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-2) var(--space-4);
+  }
+
+  .row-skeleton__persona {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 640px) {
+  :host {
+    gap: var(--space-5);
+  }
+
+  .section__header {
+    align-items: stretch;
+  }
+
+  .list-controls {
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,19 @@
+<div class="user-row" role="row">
+  <div class="user-row__persona" role="cell">
+    <span class="user-row__avatar" aria-hidden="true">{{ usuario().iniciales }}</span>
+    <span class="user-row__name">{{ usuario().nombre }}</span>
+  </div>
+
+  <span class="user-row__celda" role="cell" data-label="Pa&iacute;s">{{ usuario().pais }}</span>
+  <span class="user-row__celda" role="cell" data-label="Estado">{{ usuario().estado }}</span>
+  <span
+    class="user-row__celda"
+    role="cell"
+    data-label="Ocupaci&oacute;n"
+    [class.user-row__celda--vacia]="!usuario().ocupacion"
+    >{{ usuario().ocupacionLabel }}</span
+  >
+  <span class="user-row__celda user-row__fecha" role="cell" data-label="Registro">{{
+    usuario().fechaLabel
+  }}</span>
+</div>

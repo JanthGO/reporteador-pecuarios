@@ -1,0 +1,112 @@
+/* ── Tarjeta de total ──
+   Misma gramática de card que el resto del sistema: etiqueta arriba, cifra con
+   unidad integrada y apoyo al pie. Aquí la cifra comparte banda con el mapa de
+   altas —de una vez y del mismo tamaño— y las cuatro cifras de apoyo cierran la
+   tarjeta como una fila de instrumento.
+
+   `--celda` y `--hueco` miden la rejilla del mapa: el alto del mapa se deriva de
+   ellos, y el esqueleto de carga usa ese mismo alto para que la llegada de los
+   datos no dé un salto de layout. */
+
+:host {
+  --celda: 13px;
+  --hueco: 3px;
+  --alto-mapa: calc(var(--celda) * 7 + var(--hueco) * 6 + 22px);
+
+  /* Verde de éxito scoped: cumple 4.5:1 sobre --color-surface */
+  --color-kpi-sube: oklch(0.52 0.14 155);
+
+  display: block;
+}
+
+.kpi-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: var(--space-5);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.kpi-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.kpi-card__label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-ink-secondary);
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.kpi-card__label svg {
+  color: var(--color-sitio);
+}
+
+/* ── Cifra y mapa ──
+   El total encabeza la tarjeta y el mapa ocupa todo el ancho disponible: partir la
+   tarjeta en dos columnas le robaba al mapa unos doscientos píxeles en cualquier
+   portátil, y con ellos la posibilidad de ver un año entero sin desplazarse. */
+
+.kpi-card__main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.kpi-total {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0 var(--space-3);
+}
+
+.kpi-total__value {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: 2.5rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+}
+
+.kpi-total__unit {
+  margin: 0;
+  color: var(--color-ink-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.kpi-total__hint {
+  color: var(--color-ink-muted);
+  font-size: 0.875rem;
+}
+
+/* Espejo del mapa real —título y rejilla— para que la carga no estreche la
+   tarjeta al llegar los datos. */
+.kpi-mapa {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+
+/* ── Esqueleto ── */
+
+app-skeleton.kpi-skeleton {
+  margin-bottom: var(--space-2);
+}
+
+.kpi-stat app-skeleton:last-child {
+  margin-top: var(--space-1);
+}
+

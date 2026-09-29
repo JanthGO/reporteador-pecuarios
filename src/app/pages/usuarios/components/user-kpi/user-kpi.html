@@ -1,0 +1,88 @@
+<article class="kpi-card" [attr.aria-busy]="loading()">
+  <header class="kpi-card__head">
+    @if (loading()) {
+      <app-skeleton width="11rem" height="14px" class="kpi-skeleton"></app-skeleton>
+    } @else {
+      <span class="kpi-card__label">
+        <svg lucideUsers [size]="14" aria-hidden="true"></svg>
+        Total de usuarios registrados
+      </span>
+    }
+  </header>
+
+  @if (loading()) {
+    <div class="kpi-card__main" aria-hidden="true">
+      <div class="kpi-total">
+        <app-skeleton width="8rem" height="40px"></app-skeleton>
+        <app-skeleton width="11rem" height="13px"></app-skeleton>
+      </div>
+  
+    </div>
+
+    <!-- <ul class="kpi-stats" aria-hidden="true">
+      @for (apoyo of apoyos; track apoyo) {
+        <li class="kpi-stat">
+          <app-skeleton width="6rem" height="11px"></app-skeleton>
+          <app-skeleton width="4rem" height="20px"></app-skeleton>
+          <app-skeleton width="7rem" height="11px"></app-skeleton>
+        </li>
+      }
+    </ul> -->
+  } @else {
+    <div class="kpi-card__main">
+      <div class="kpi-total">
+        <p class="kpi-total__value">{{ formatNumber(total()) }}</p>
+        <p class="kpi-total__unit">
+          {{ total() === 1 ? 'usuario' : 'usuarios' }}
+          <span class="kpi-total__hint">durante el periodo</span>
+        </p>
+      </div>
+
+
+    </div>
+
+    <!-- <ul class="kpi-stats">
+      <li class="kpi-stat">
+        <span class="kpi-stat__label">Media diaria</span>
+        <span class="kpi-stat__value">{{ formatNumber(media()) }}</span>
+        <span class="kpi-stat__hint">altas por día</span>
+      </li>
+
+      <li class="kpi-stat">
+        <span class="kpi-stat__label">Últimos 7 días</span>
+        <span class="kpi-stat__value">{{ formatNumber(ultimosSiete()) }}</span>
+        @if (variacion() !== null) {
+          <span class="kpi-stat__hint kpi-stat__variacion" [attr.data-sentido]="sentido()">
+            @switch (sentido()) {
+              @case ('sube') {
+                <svg lucideTrendingUp [size]="13" aria-hidden="true"></svg>
+              }
+              @case ('baja') {
+                <svg lucideTrendingDown [size]="13" aria-hidden="true"></svg>
+              }
+              @default {
+                <svg lucideMinus [size]="13" aria-hidden="true"></svg>
+              }
+            }
+            {{ formatVariacion(variacion()) }}
+            <span class="kpi-stat__nota">vs. los 7 previos</span>
+          </span>
+        } @else {
+          <span class="kpi-stat__hint">Sin altas en los 7 días previos</span>
+        }
+      </li>
+
+      <li class="kpi-stat">
+        <span class="kpi-stat__label">Día con más altas</span>
+        <span class="kpi-stat__value">{{ formatNumber(mapa().max) }}</span>
+        <span class="kpi-stat__hint">{{ picoLabel() }}</span>
+      </li>
+
+      <li class="kpi-stat">
+        <span class="kpi-stat__label">Días con altas</span>
+        <span class="kpi-stat__value">{{ formatNumber(diasConAltas()) }}</span>
+        <span class="kpi-stat__hint">de {{ diasMapa() }} días</span>
+      </li>
+    </ul> -->
+  }
+</article>

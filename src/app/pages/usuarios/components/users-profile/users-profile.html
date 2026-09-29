@@ -1,0 +1,73 @@
+<section class="section">
+  @if (loading()) {
+    <div class="profile-grid" aria-busy="true">
+      @for (bloque of esqueletos; track bloque) {
+        <div class="profile-card" aria-hidden="true">
+          <div class="profile-card__head">
+            <app-skeleton width="34px" height="34px" radius="8px"></app-skeleton>
+            <app-skeleton width="5.5rem" height="14px"></app-skeleton>
+          </div>
+          <div class="profile-card__ring">
+            <app-skeleton width="140px" height="140px" radius="var(--radius-full)"></app-skeleton>
+          </div>
+          <div class="profile-list">
+            @for (fila of [1, 2, 3]; track fila) {
+              <app-skeleton width="100%" height="12px"></app-skeleton>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="profile-grid">
+      @for (grupo of grupos(); track grupo.clave) {
+        <div class="profile-card">
+          <div class="profile-card__head">
+            <div
+              class="profile-card__icon"
+              [class.profile-card__icon--pais]="grupo.clave === 'pais'"
+              [class.profile-card__icon--edad]="grupo.clave === 'edad'"
+              [class.profile-card__icon--ocupacion]="grupo.clave === 'ocupacion'"
+            >
+              @switch (grupo.clave) {
+                @case ('pais') {
+                  <svg lucideGlobe [size]="18"></svg>
+                }
+                @case ('edad') {
+                  <svg lucideUsers [size]="18"></svg>
+                }
+                @default {
+                  <svg lucideBriefcase [size]="18"></svg>
+                }
+              }
+            </div>
+            <span class="profile-card__label">{{ grupo.label }}</span>
+          </div>
+
+          @if (opciones()[grupo.clave]; as opciones) {
+            <div class="profile-card__ring">
+              <div class="profile-ring">
+                <highcharts-chart [options]="opciones" [update]="true" [oneToOne]="true"></highcharts-chart>
+              </div>
+            </div>
+
+            <ul class="profile-list">
+              @for (item of grupo.items; track item.label; let i = $index) {
+                <li class="profile-list__item">
+                  <span class="profile-list__dot" [style.background]="colorDe(grupo.clave, i)"></span>
+                  <span class="profile-list__name">{{ item.label }}</span>
+                  <span class="profile-list__value">
+                    {{ formatPct(item.pct) }}
+                    <span class="profile-list__count">· {{ formatNumber(item.conteo) }}</span>
+                  </span>
+                </li>
+              }
+            </ul>
+          } @else {
+            <p class="profile-card__hint">Sin categor&iacute;as para este periodo</p>
+          }
+        </div>
+      }
+    </div>
+  }
+</section>

@@ -1,0 +1,19 @@
+<label class="select-field" [class.select-field--inline]="variant() === 'inline'">
+  <span class="select-field__label">{{ label() }}</span>
+
+  <span class="select-field__control">
+    <select
+      class="select-field__select"
+      [value]="value()"
+      [disabled]="disabled()"
+      [attr.aria-label]="label()"
+      (change)="onChange($event)"
+    >
+      <option value="">{{ placeholder() }}</option>
+      @for (opcion of options(); track opcion.valor) {
+        <option [value]="opcion.valor">{{ texto(opcion) }}</option>
+      }
+    </select>
+    <svg lucideChevronDown class="select-field__caret" [size]="14" aria-hidden="true"></svg>
+  </span>
+</label>

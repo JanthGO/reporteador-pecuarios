@@ -1,0 +1,112 @@
+/* ── Paginación ──
+   Tres bloques en una sola línea: qué se está viendo, cuántas filas se piden por
+   página y el recorrido. En pantallas estrechas se apilan, porque una fila de
+   controles que no cabe obliga a un scroll horizontal que el resto de la vista
+   no necesita. */
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+}
+
+.pagination__coverage {
+  margin: 0;
+  color: var(--color-ink-secondary);
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.pagination__controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  flex-wrap: wrap;
+}
+
+.pagination__pages {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.pagination__page,
+.pagination__step {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 var(--space-2);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  color: var(--color-ink-secondary);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  transition:
+    background var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out);
+}
+
+.pagination__page:hover:not(:disabled),
+.pagination__step:hover:not(:disabled) {
+  background: var(--color-surface);
+  border-color: var(--color-border);
+  color: var(--color-ink);
+}
+
+.pagination__page:focus-visible,
+.pagination__step:focus-visible {
+  outline: 2px solid var(--color-sitio);
+  outline-offset: 2px;
+}
+
+.pagination__page--active {
+  background: var(--color-sitio);
+  color: #fff;
+  font-weight: 600;
+}
+
+.pagination__page--active:hover {
+  background: var(--color-sitio);
+  border-color: transparent;
+  color: #fff;
+}
+
+.pagination__step:disabled {
+  color: var(--color-ink-muted);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.pagination__gap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 28px;
+  color: var(--color-ink-muted);
+  font-size: 0.75rem;
+  user-select: none;
+}
+
+@media (max-width: 640px) {
+  .pagination {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .pagination__controls {
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+}

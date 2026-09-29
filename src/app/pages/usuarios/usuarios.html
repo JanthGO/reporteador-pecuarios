@@ -1,0 +1,176 @@
+<!-- Encabezado -->
+<section class="title-section">
+  <div class="title-section__text">
+    <h1 class="title-section__heading">Usuarios registrados</h1>
+    <p class="title-section__sub">
+      Cuántas personas se han dado de alta, de dónde vienen y cómo se reparten, con el detalle completo de la base del periodo seleccionado.
+    </p>
+  </div>
+
+  <div class="title-section__actions">
+    <app-date-range (rangeChange)="onRangeChange($event)"></app-date-range>
+  </div>
+</section>
+
+@if (errorMsg(); as mensaje) {
+  <div class="error-strip">
+    <app-empty-state
+      tone="danger"
+      title="No se pudo cargar el módulo"
+      [detail]="mensaje"
+    ></app-empty-state>
+    <button class="btn-secondary" type="button" (click)="reintentar()">
+      <svg lucideRefreshCw [size]="15"></svg>
+      Reintentar
+    </button>
+  </div>
+} @else if (hayDatos() || cargando()) {
+  <!-- ── KPIs ── -->
+  <app-user-kpi
+    [usuarios]="usuarios()"
+    [rango]="rango()"
+    [loading]="cargando()"
+  ></app-user-kpi>
+
+  <!-- ── Composición de la base ── -->
+  <app-users-profile [grupos]="grupos()" [loading]="cargando()"></app-users-profile>
+
+  <!-- ── Directorio ── -->
+  <section class="section">
+    <div class="section__header">
+      <div>
+        <h2 class="section__title">Directorio de usuarios</h2>
+        <p class="section__sub">
+          @if (cargando()) {
+            Consultando la base del periodo seleccionado.
+          } @else {
+            <span class="results">
+              {{ formatNumber(filtrados().length) }}
+              {{ filtrados().length === 1 ? 'usuario' : 'usuarios' }}
+              @if (formatRango(rango()); as periodo) {
+                <span class="results__period">&middot; {{ periodo }}</span>
+              }
+            </span>
+          }
+        </p>
+      </div>
+
+      <div class="list-controls">
+        <app-search
+          [value]="busqueda()"
+          (valueChange)="onBusqueda($event)"
+          placeholder="Buscar usuario..."
+          ariaLabel="Buscar usuario por nombre, pa&iacute;s, estado u ocupaci&oacute;n"
+        ></app-search>
+
+        <app-select-field
+          label="Pa&iacute;s"
+          [options]="paises()"
+          [value]="filtros().pais"
+          (valueChange)="onFiltroPais($event)"
+        ></app-select-field>
+
+        <app-select-field
+          label="Estado"
+          [options]="estados()"
+          [value]="filtros().estado"
+          (valueChange)="onFiltroEstado($event)"
+        ></app-select-field>
+
+        <app-select-field
+          label="Ocupaci&oacute;n"
+          [options]="ocupaciones()"
+          [value]="filtros().ocupacion"
+          (valueChange)="onFiltroOcupacion($event)"
+        ></app-select-field>
+
+        <app-select-field
+          class="list-controls__orden-movil"
+          label="Ordenar por"
+          placeholder="Ordenar por"
+          [options]="opcionesOrden()"
+          [value]="ordenActual()"
+          (valueChange)="onOrdenValor($event)"
+        ></app-select-field>
+      </div>
+    </div>
+
+    @if (cargando()) {
+      <div class="usuarios-grid" aria-busy="true">
+        @for (fila of esqueletos; track fila) {
+          <div class="row-skeleton" aria-hidden="true">
+            <span class="row-skeleton__persona">
+              <app-skeleton width="32px" height="32px" radius="var(--radius-full)"></app-skeleton>
+              <app-skeleton width="70%" height="12px"></app-skeleton>
+            </span>
+            <app-skeleton width="80%" height="12px"></app-skeleton>
+            <app-skeleton width="80%" height="12px"></app-skeleton>
+            <app-skeleton width="80%" height="12px"></app-skeleton>
+            <app-skeleton width="70%" height="12px"></app-skeleton>
+          </div>
+        }
+      </div>
+    } @else if (filtrados().length === 0) {
+      @if (directorioAcotado()) {
+        <app-empty-state
+          icon="search"
+          title="No encontramos usuarios con ese criterio"
+          detail="Prueba cambiando los filtros aplicados."
+        ></app-empty-state>
+      } @else {
+        <app-empty-state
+          icon="users"
+          title="No se encontraron usuarios"
+          detail="Prueba cambiando los filtros aplicados."
+        ></app-empty-state>
+      }
+    } @else {
+      <div class="usuarios-grid" role="table" aria-label="Directorio de usuarios registrados">
+        <div class="usuarios-head" role="row">
+          @for (columna of columnas; track columna.campo) {
+            <div class="usuarios-head__cell" role="columnheader" [attr.aria-sort]="ariaSort(columna.campo)">
+              <button
+                class="sort"
+                type="button"
+                [class.sort--active]="orden().campo === columna.campo"
+                (click)="onOrden(columna.campo)"
+              >
+                <span>{{ columna.label }}</span>
+                @if (orden().campo === columna.campo) {
+                  @if (orden().direccion === 'asc') {
+                    <svg lucideChevronUp [size]="13" aria-hidden="true"></svg>
+                  } @else {
+                    <svg lucideChevronDown [size]="13" aria-hidden="true"></svg>
+                  }
+                } @else {
+                  <svg lucideArrowUpDown [size]="13" aria-hidden="true"></svg>
+                }
+              </button>
+            </div>
+          }
+        </div>
+
+        @for (usuario of visibles(); track usuario.clave) {
+          <app-user-row [usuario]="usuario"></app-user-row>
+        }
+      </div>
+
+      <app-pagination
+        unidad="usuarios"
+        [pagina]="pagina()"
+        [totalPaginas]="totalPaginas()"
+        [total]="filtrados().length"
+        [pageSize]="pageSize()"
+        [pageSizes]="pageSizes"
+        (paginaChange)="onPagina($event)"
+        (pageSizeChange)="onPageSize($event)"
+      ></app-pagination>
+    }
+  </section>
+} @else {
+  <app-empty-state
+    icon="calendar-range"
+    title="No hay información disponible para este periodo"
+    detail="Intenta seleccionar un rango de fechas diferente."
+  ></app-empty-state>
+}

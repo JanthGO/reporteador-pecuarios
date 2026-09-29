@@ -24,6 +24,17 @@ const SECCIONES: Record<string, string> = {
   videos: 'Video',
 };
 
+/** Clave de ícono por clave de sección; difiere de la clave en el singular 'vacante'. */
+const ICONOS: Record<string, string> = {
+  productos: 'icon-productos',
+  articulos: 'icon-articulos',
+  micrositio: 'icon-micrositio',
+  noticias: 'icon-noticias',
+  eventos: 'icon-eventos',
+  vacante: 'icon-vacantes',
+  videos: 'icon-videos',
+};
+
 /** Normaliza un texto para comparaciones tolerantes (minúsculas, sin tildes). */
 function normalize(value: string): string {
   return value
@@ -50,7 +61,7 @@ function resolveSeccion(value: string | undefined): { nombre: string; clase: str
   const byName = entries.find(([, nombre]) => normalize(nombre) === key)?.[0];
   const match = byKey ?? byName;
   return match
-    ? { nombre: SECCIONES[match], clase: `icon-${match}` }
+    ? { nombre: SECCIONES[match], clase: ICONOS[match] ?? `icon-${match}` }
     : { nombre: value?.trim() || 'General', clase: 'icon-general' };
 }
 
