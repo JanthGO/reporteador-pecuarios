@@ -25,6 +25,11 @@ export const routes: Routes = [
         path: 'campanias',
         loadComponent: () =>
           import('./pages/campanias/campanias').then((m) => m.Campanias),
+      },
+      {
+        path: 'usuarios-registrados',
+        loadComponent: () =>
+          import('./pages/usuarios/usuarios').then((m) => m.Usuarios),
       }
     ],
   },
