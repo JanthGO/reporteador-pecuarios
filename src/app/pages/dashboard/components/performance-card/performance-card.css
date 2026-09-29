@@ -42,41 +42,6 @@
   border-radius: var(--radius-sm);
 }
 
-.content-card__icon--products {
-  background: oklch(0.92 0.04 256);
-  color: oklch(0.5 0.14 256);
-}
-
-.content-card__icon--articles {
-  background: oklch(0.92 0.04 185);
-  color: oklch(0.5 0.14 185);
-}
-
-.content-card__icon--microsite {
-  background: oklch(0.92 0.04 155);
-  color: oklch(0.5 0.14 155);
-}
-
-.content-card__icon--news {
-  background: oklch(0.92 0.04 75);
-  color: oklch(0.55 0.12 75);
-}
-
-.content-card__icon--events {
-  background: oklch(0.92 0.04 320);
-  color: oklch(0.5 0.14 320);
-}
-
-.content-card__icon--videos {
-  background: oklch(0.92 0.04 25);
-  color: oklch(0.55 0.14 25);
-}
-
-.content-card__icon--jobs {
-  background: oklch(0.93 0.01 256);
-  color: var(--color-ink-muted);
-}
-
 .content-card__top {
   display: flex;
   gap: var(--space-2);

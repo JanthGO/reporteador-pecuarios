@@ -63,9 +63,7 @@
   width: 40px;
   height: 40px;
   flex-shrink: 0;
-  background: oklch(0.95 0.01 260);
   border-radius: var(--radius-sm);
-  color: var(--color-ink-muted);
 }
 
 .activity-card__icon svg {
@@ -105,46 +103,6 @@
   border-radius: var(--radius-full);
   font-size: 0.75rem;
   font-weight: 500;
-}
-
-.activity-badge--productos {
-  background: oklch(0.92 0.04 185);
-  color: oklch(0.45 0.12 185);
-}
-
-.activity-badge--articulos {
-  background: oklch(0.94 0.03 255);
-  color: oklch(0.45 0.12 255);
-}
-
-.activity-badge--micrositio {
-  background: oklch(0.93 0.04 145);
-  color: oklch(0.42 0.11 145);
-}
-
-.activity-badge--noticias {
-  background: oklch(0.93 0.04 65);
-  color: oklch(0.45 0.11 65);
-}
-
-.activity-badge--eventos {
-  background: oklch(0.93 0.04 300);
-  color: oklch(0.45 0.12 300);
-}
-
-.activity-badge--vacante {
-  background: oklch(0.94 0.03 35);
-  color: oklch(0.45 0.11 35);
-}
-
-.activity-badge--videos {
-  background: oklch(0.94 0.03 20);
-  color: oklch(0.45 0.11 20);
-}
-
-.activity-badge--general {
-  background: oklch(0.95 0.01 260);
-  color: oklch(0.5 0.05 260);
 }
 
 .activity-card__meta {

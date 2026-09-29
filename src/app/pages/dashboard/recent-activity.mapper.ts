@@ -50,8 +50,8 @@ function resolveSeccion(value: string | undefined): { nombre: string; clase: str
   const byName = entries.find(([, nombre]) => normalize(nombre) === key)?.[0];
   const match = byKey ?? byName;
   return match
-    ? { nombre: SECCIONES[match], clase: `activity-badge--${match}` }
-    : { nombre: value?.trim() || 'General', clase: 'activity-badge--general' };
+    ? { nombre: SECCIONES[match], clase: `icon-${match}` }
+    : { nombre: value?.trim() || 'General', clase: 'icon-general' };
 }
 
 /** Convierte un texto de fecha/hora a `Date` si es parseable, o `null`. */

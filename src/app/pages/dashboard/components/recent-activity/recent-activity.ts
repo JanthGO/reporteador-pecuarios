@@ -12,14 +12,14 @@ import { Skeleton } from '../../../../shared/components/skeleton/skeleton';
 
 /** Ícono de Lucide por clase de badge de sección, espejo de las secciones del dashboard. */
 const SECTION_ICONS: Record<string, string> = {
-  'activity-badge--productos': 'syringe',
-  'activity-badge--articulos': 'file-text',
-  'activity-badge--micrositio': 'globe',
-  'activity-badge--noticias': 'newspaper',
-  'activity-badge--eventos': 'calendar',
-  'activity-badge--vacante': 'users',
-  'activity-badge--videos': 'video',
-  'activity-badge--general': 'activity',
+  'icon-productos': 'syringe',
+  'icon-articulos': 'file-text',
+  'icon-micrositio': 'globe',
+  'icon-noticias': 'newspaper',
+  'icon-eventos': 'calendar',
+  'icon-vacantes': 'users',
+  'icon-videos': 'video',
+  'icon-general': 'activity',
 };
 
 /** Esqueletos de tarjetas de actividad mientras la sección carga. */
@@ -41,7 +41,7 @@ export class RecentActivity {
   protected readonly esqueletos = ESQUELETOS_ACTIVIDAD;
 
   /** Nombre del ícono de Lucide para la sección de la actividad. */
-  iconFor(item: ActivityItem): string {    
+  iconFor(item: ActivityItem): string {        
     return SECTION_ICONS[item.seccionClass] ?? 'activity';
   }
 }
