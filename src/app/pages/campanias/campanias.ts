@@ -12,6 +12,7 @@ import { Skeleton } from '../../shared/components/skeleton/skeleton';
 import { aIso } from '../../shared/utils/fechas';
 import { normalizar } from '../../shared/utils/texto';
 
+
 @Component({
   selector: 'app-campanias',
   standalone: true,
