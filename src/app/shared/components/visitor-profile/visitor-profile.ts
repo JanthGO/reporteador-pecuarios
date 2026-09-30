@@ -1,11 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { LucideUser, LucideClock, LucideGlobe } from '@lucide/angular';
-import {
-  AgeBucket,
-  PerfilVisitante,
-  info,
-  rangosEdad,
-} from '../../../core/interfaces/dashboard/PerfilVisitante';
+import { PerfilVisitante, info } from '../../../core/interfaces/dashboard/PerfilVisitante';
+import { AgeBucket, rangosEdad } from '../../utils/edades';
 import { environment } from '../../../../environments/environment';
 import { Skeleton } from '../skeleton/skeleton';
 
@@ -41,8 +37,7 @@ export class VisitorProfile {
    * Distribución combinada de edad (hombre + mujer por rango), ordenada de forma
    * descendente. El backend entrega los porcentajes separados por género, y la
    * regla de negocio los agrega para mostrar el desglose total por rango de edad.
-   * La transformación vive en `rangosEdad` porque el módulo de productos consume
-   * exactamente la misma regla.
+   * La transformación vive en el util compartido `edades`.
    */
   protected readonly rangosEdad = computed<AgeBucket[]>(() => rangosEdad(this.perfil()));
 

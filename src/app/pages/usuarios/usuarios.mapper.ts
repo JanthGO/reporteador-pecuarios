@@ -1,4 +1,5 @@
 ﻿import { Usuarios } from '../../core/interfaces/users/user';
+import { TRAMOS_EDAD } from '../../shared/utils/edades';
 
 /**
  * Mapper de la vista de usuarios registrados.
@@ -215,16 +216,6 @@ const MAPA_VACIO: MapaAltas = {
   variacion: null,
   recortado: false,
 };
-
-/** Rangos de edad en orden cronológico, con los mismos rótulos del perfil del visitante. */
-const TRAMOS_EDAD: readonly string[] = [
-  'Menos de 20 años',
-  '20–30 años',
-  '30–40 años',
-  '40–50 años',
-  '50–60 años',
-  'Más de 60 años',
-];
 
 /**
  * Formatea un número con separadores de miles en español (p. ej. `5,537`).

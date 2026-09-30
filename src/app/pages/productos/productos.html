@@ -12,19 +12,7 @@
   </div>
 </section>
 
-@if (errorMsg(); as mensaje) {
-  <div class="error-strip">
-    <app-empty-state
-      tone="danger"
-      title="No se pudo cargar el módulo"
-      [detail]="mensaje"
-    ></app-empty-state>
-    <button class="btn-secondary" type="button" (click)="reintentar()">
-      <svg lucideRefreshCw [size]="15"></svg>
-      Reintentar
-    </button>
-  </div>
-} @else if (hayDatos() || cargando()) {
+@if (hayDatos() || cargando()) {
   <!-- ── KPIs ── -->
   <app-kpi-band [seccion]="seccion()" [loading]="cargando()"></app-kpi-band>
 
@@ -46,7 +34,7 @@
             <span class="results">
               {{ formatNumber(productos().length) }}
               {{ productos().length === 1 ? 'producto' : 'productos' }}
-              @if (formatRango(rango()); as periodo) {
+              @if (formatRango(periodo()); as periodo) {
                 <span class="results__period">· {{ periodo }}</span>
               }
             </span>

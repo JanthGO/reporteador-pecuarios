@@ -25,13 +25,13 @@ export function aIso(fecha: string | null | undefined): string {
 }
 
 /**
- * Formatea una fecha a etiqueta corta es-MX (p. ej. `18 sep 2026`).
+ * Formatea una fecha a etiqueta larga es-MX (p. ej. `18 de septiembre de 2026`).
  *
  * Si la cadena no es una fecha reconocible se devuelve tal cual, para no
  * perder información del dato de origen.
  *
  * @param fecha - Fecha cruda (`YYYY-MM-DD[ HH:mm:ss]` o `dd/mm/aaaa`).
- * @returns Etiqueta corta, o el valor original si no es una fecha válida.
+ * @returns Etiqueta larga, o el valor original si no es una fecha válida.
  */
 export function formatFechaLarga(fecha: string | null | undefined): string {
   const iso = aIso(fecha);

@@ -1,43 +1,72 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  PLATFORM_ID,
-  computed,
-  effect,
-  inject,
-  input,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, PLATFORM_ID, computed, effect, inject, input, signal} from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { HighchartsChartComponent } from 'highcharts-angular';
 import type Highcharts from 'highcharts';
-import {
-  LucideCalendarDays,
-  LucideImageOff,
-  LucideTrendingUp,
-} from '@lucide/angular';
-import { Secciones, Visitas } from '../../../../core/interfaces/dashboard/visitas';
+import { LucideCalendarDays, LucideImageOff, LucideTrendingUp } from '@lucide/angular';
+import { Contenidos, Secciones, Visitas, elemento } from '../../../../core/interfaces/dashboard/visitas';
 import { Skeleton } from '../../../../shared/components/skeleton/skeleton';
-import {
-  cuentaConVisitas,
-  formatDia,
-  formatNumber,
-  selectPico,
-  selectTopProducto,
-} from '../../productos.mapper';
+import { formatNumber } from '../../../../shared/utils/numeros';
+
+const DIA = new Intl.DateTimeFormat('es-MX', { day: 'numeric', month: 'short' });
 
 /**
- * Banda de KPIs de la sección de productos.
+ * Cuenta los productos que recibieron al menos una visita en el periodo.
  *
- * Tres tarjetas con la misma gramática de card del dashboard. La primera es la
- * única que lleva gráfica: el total del periodo y la forma de su curva sobre el
- * mismo eje, porque un total suelto obliga a cambiar de vista para entenderlo.
- * Las otras dos responden preguntas distintas —cuánto catálogo hay y cuál se
- * llevó el tráfico— y por eso comparten banda sin competir con la primera.
- *
- * Recibe la sección tal como la entrega el endpoint y deriva aquí todo lo que
- * se muestra, para que la página no cargue con la agregación.
+ * @param contenidos - Contenidos de productos devueltos por el endpoint.
+ * @returns Número de productos con visitas mayores que cero.
  */
+export function cuentaConVisitas(contenidos: Contenidos | null | undefined): number {
+  if (!Array.isArray(contenidos?.data)) return 0;
+  return contenidos.data.filter((item) => (item?.visitas ?? 0) > 0).length;
+}
+
+/**
+ * Elige el producto con más visitas del periodo.
+ * 
+ * @param contenidos - Contenidos de productos devueltos por el endpoint.
+ * @returns El producto más visitado, o `null` si no hay productos.
+ */
+export function selectTopProducto(contenidos: Contenidos | null | undefined): elemento | null {
+  const candidatos = [
+    ...(Array.isArray(contenidos?.popular) ? contenidos.popular : []),
+    ...(Array.isArray(contenidos?.data) ? contenidos.data : []),
+  ].filter((item): item is elemento => !!item);
+
+  if (!candidatos.length) return null;
+
+  return candidatos.reduce((mejor, actual) =>
+    (actual.visitas ?? 0) > (mejor.visitas ?? 0) ? actual : mejor,
+  );
+}
+
+/**
+ * Localiza el día con más visitas de la serie.
+ *
+ * @param serie - Serie temporal devuelta por el endpoint.
+ * @returns El punto máximo, o `null` si la serie está vacía.
+ */
+export function selectPico(serie: Visitas[] | null | undefined): Visitas | null {
+  if (!Array.isArray(serie) || !serie.length) return null;
+
+  return serie.reduce((pico, punto) =>
+    (punto?.visitas ?? 0) > (pico?.visitas ?? 0) ? punto : pico,
+  );
+}
+
+/**
+ * Acorta una fecha de la serie a día y mes en español (p. ej. `12 mar`).
+ *
+ * @param fecha - Fecha cruda del endpoint (`YYYY-MM-DD`).
+ * @returns Etiqueta corta, o la fecha tal cual si no es un ISO reconocible.
+ */
+export function formatDia(fecha: string | null | undefined): string {
+  const iso = (fecha ?? '').slice(0, 10);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(iso)) return fecha ?? '';
+
+  const [anio, mes, dia] = iso.split('-').map(Number);
+  return DIA.format(new Date(anio, mes - 1, dia));
+}
+
 @Component({
   selector: 'app-kpi-band',
   standalone: true,
@@ -53,7 +82,6 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class KpiBand {
-  /** Datos de la sección de productos. `null` mientras no haya respuesta. */
   readonly seccion = input<Secciones | null>(null);
   readonly loading = input(false);
 
@@ -65,7 +93,6 @@ export class KpiBand {
   protected readonly topProducto = computed(() => selectTopProducto(this.seccion()?.contenidos));
   protected readonly pico = computed(() => selectPico(this.serieVisitas()));
 
-  /** Sustituye la foto del producto más visitado cuando el recurso no carga. */
   protected readonly imagenTopFallida = signal(false);
 
   protected readonly formatNumber = formatNumber;

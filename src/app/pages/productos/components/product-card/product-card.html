@@ -19,7 +19,7 @@
 
   <span class="product-card__body">
     <span class="product-card__name">{{ producto().nombre }}</span>
-    @if (!producto().activo) {
+    @if (!producto().estatus ) {
       <span class="product-card__badge">Inactivo</span>
     }
   </span>

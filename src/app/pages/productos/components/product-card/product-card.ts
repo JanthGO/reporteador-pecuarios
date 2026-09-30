@@ -1,23 +1,8 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  effect,
-  input,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, input, signal } from '@angular/core';
 import { LucideImageOff } from '@lucide/angular';
-import { ProductoItem, formatNumber } from '../../productos.mapper';
+import { formatNumber } from '../../../../shared/utils/numeros';
+import { elemento } from '../../../../core/interfaces/dashboard/visitas';
 
-/**
- * Fila de un producto dentro del ranking.
- *
- * La jerarquía la fija el módulo: el nombre manda, el conteo de visitas resuelve
- * la comparación y la imagen solo confirma el reconocimiento. Por eso el número
- * va alineado a la derecha en cifras tabulares —una columna de cifras que se
- * lee de un vistazo al bajar por la lista— y la miniatura se queda en el tamaño
- * de un recordatorio, no de un escaparate.
- */
 @Component({
   selector: 'app-product-card',
   standalone: true,
@@ -27,12 +12,9 @@ import { ProductoItem, formatNumber } from '../../productos.mapper';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductCard {
-  readonly producto = input.required<ProductoItem>();
-
-  /** Sustituye la foto por un marcador cuando el recurso no carga. */
+  readonly producto = input.required<elemento>();
   readonly imagenFallida = signal(false);
 
-  /** El endpoint puede devolver el producto sin foto: se muestra el marcador. */
   protected readonly tieneImagen = computed(() => (this.producto().imagen ?? '').trim().length > 0);
 
   protected readonly formatNumber = formatNumber;

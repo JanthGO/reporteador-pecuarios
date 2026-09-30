@@ -47,11 +47,20 @@ export interface Contenidos {
 }
 
 export interface elemento {
-    id:      number;
-    nombre:  string;
-    imagen:  string;
-    estatus: number;
-    visitas: number;
-    url:     string;
-    orden?:     number;
+    id:             number;
+    nombre:         string;
+    imagen:         string;
+    estatus:        number;
+    visitas:        number;
+    url:            string;
+    orden?:         number;
+    posicion?:      number;
+    proporcion?:    number;
 }
+
+export interface OpcionOrden {
+  key: Orden;
+  label: string;
+}
+
+export type Orden = 'visitas-desc' | 'visitas-asc' | 'nombre-asc';
