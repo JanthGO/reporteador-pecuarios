@@ -1,6 +1,9 @@
 export const environment = {
     production: false,
     api: 'https://api.pecuarios.com/reports/',
+    IMAGEN_BASE: 'https://www.pecuarios.club/',
+
+
 
     // -> PORCICULTURA
     // division: 1,

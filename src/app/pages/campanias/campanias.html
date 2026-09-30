@@ -19,24 +19,14 @@
   ></app-search>
 </div>
 
-@if (errorMsg(); as error) {
-  <div class="campaigns-state">
-    <app-empty-state
-      icon="alert-triangle"
-      tone="danger"
-      title="No pudimos cargar las campañas"
-      [detail]="error"
-    ></app-empty-state>
-    <button class="btn-secondary" type="button" (click)="cargar(rango())">Reintentar</button>
-  </div>
-} @else if (cargando()) {
+@if (cargando()) {
   <div class="campaign-grid" aria-busy="true">
     @for (esqueleto of esqueletos; track esqueleto) {
       <div class="campaign-card campaign-card--skeleton" aria-hidden="true">
-        <app-skeleton width="100%" height="9rem"></app-skeleton>
+        <app-skeleton width="150px" height="85px"></app-skeleton>
         <div class="campaign-card__body">
-          <app-skeleton width="70%" height="15px"></app-skeleton>
-          <app-skeleton width="45%" height="12px"></app-skeleton>
+          <app-skeleton  height="20px"></app-skeleton>
+          <app-skeleton  height="50px"></app-skeleton>
         </div>
       </div>
     }

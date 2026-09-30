@@ -1,15 +1,8 @@
-import { ChangeDetectionStrategy, Component, effect, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, input, signal } from '@angular/core';
 import { LucideArrowUpRight, LucideImageOff } from '@lucide/angular';
-import { CampaniaItem } from '../../../../core/interfaces/campanias/Campania';
+import { CampaniaMail } from '../../../../core/interfaces/campanias/Campania';
+import { aIso, formatFechaLarga } from '../../../../shared/utils/fechas';
 
-/**
- * Tarjeta de una campaña.
- *
- * La tarjeta completa es el enlace: un solo ancla que abre la campaña en una
- * pestaña nueva. Así el elemento se lee como clickeable sin duplicar el
- * destino en un segundo enlace anidado, y el icono de la derecha es
- * decorativo (`aria-hidden`).
- */
 @Component({
   selector: 'app-campaign-card',
   standalone: true,
@@ -19,14 +12,13 @@ import { CampaniaItem } from '../../../../core/interfaces/campanias/Campania';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CampaignCard {
-  readonly campania = input.required<CampaniaItem>();
-
-  /** Sustituye la imagen por un marcador cuando el recurso no carga. */
+  readonly campania = input.required<CampaniaMail>();
   readonly imagenFallida = signal(false);
 
+  readonly fechaLabel = computed(() => formatFechaLarga(this.campania().fecha_publicacion));
+
   constructor() {
-    // Al cambiar de campaña se reintenta la imagen: Angular reutiliza esta
-    // instancia entre elementos del `@for`.
+    // Al cambiar de campaña se reintenta la imagen: Angular reutiliza esta instancia entre elementos del `@for`.
     effect(() => {
       this.campania().imagen;
       this.imagenFallida.set(false);

@@ -1,6 +1,6 @@
 <a
   class="campaign-card"
-  [href]="campania().enlace"
+  [href]="campania().url"
   target="_blank"
   rel="noopener noreferrer"
   [attr.aria-label]="campania().nombre + ' — se abre en una pestaña nueva'"
@@ -20,7 +20,7 @@
   </span>
 
   <span class="campaign-card__body">
-    <time class="campaign-card__date" [attr.datetime]="campania().fechaIso">{{ campania().fechaLabel }}</time>
+    <time class="campaign-card__date">{{ fechaLabel() }}</time>
     <span class="campaign-card__name">{{ campania().nombre }}</span>
   </span>
 
